@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign My ATA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #fff6fb;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      resize: none;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+
+    .comment {
+      background: white;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    small {
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🪧 Sign My ATA</h1>
+
+  <form id="commentForm">
+    <textarea id="commentInput" rows="3" placeholder="Tulis pesan anonim..." required></textarea>
+    <br>
+    <button type="submit">Kirim</button>
+  </form>
+
+  <div id="comments"></div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // 🔥 GANTI DENGAN CONFIG FIREBASE KAMU
+    const firebaseConfig = {
+      apiKey: "API_KEY_KAMU",
+      authDomain: "PROJECT_ID.firebaseapp.com",
+      projectId: "PROJECT_ID",
+      storageBucket: "PROJECT_ID.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const commentsRef = collection(db, "comments");
+
+    const form = document.getElementById("commentForm");
+    const input = document.getElementById("commentInput");
+    const commentsDiv = document.getElementById("comments");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!input.value.trim()) return;
+
+      await addDoc(commentsRef, {
+        text: input.value,
+        time: serverTimestamp()
+      });
+
+      input.value = "";
+    });
+
+    const q = query(commentsRef, orderBy("time", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+      commentsDiv.innerHTML = "";
+
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+
+        const div = document.createElement("div");
+        div.className = "comment";
+
+        const text = document.createElement("p");
+        text.textContent = data.text;
+
+        const time = document.createElement("small");
+        time.textContent = data.time?.toDate
+          ? data.time.toDate().toLocaleString()
+          : "baru saja";
+
+        div.appendChild(text);
+        div.appendChild(time);
+
+        commentsDiv.appendChild(div);
+      });
+    });
+  </script>
+
+</body>
+</html>
