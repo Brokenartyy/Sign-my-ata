@@ -58,75 +58,70 @@
 
   <!-- FIREBASE -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      onSnapshot,
-      query,
-      orderBy,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    onSnapshot,
+    query,
+    orderBy,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // 🔥 GANTI DENGAN CONFIG FIREBASE KAMU
-    const firebaseConfig = {
-      apiKey: "API_KEY_KAMU",
-      authDomain: "PROJECT_ID.firebaseapp.com",
-      projectId: "PROJECT_ID",
-      storageBucket: "PROJECT_ID.appspot.com",
-      messagingSenderId: "SENDER_ID",
-      appId: "APP_ID"
-    };
+  // 🔥 CONFIG ASLI PUNYA KAMU (INI AMAN)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
+    authDomain: "pony-ata.firebaseapp.com",
+    projectId: "pony-ata",
+    storageBucket: "pony-ata.firebasestorage.app",
+    messagingSenderId: "885964673100",
+    appId: "1:885964673100:web:038c51f39b2a27278aa4e9"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    const commentsRef = collection(db, "comments");
+  const commentsRef = collection(db, "comments");
 
-    const form = document.getElementById("commentForm");
-    const input = document.getElementById("commentInput");
-    const commentsDiv = document.getElementById("comments");
+  const form = document.getElementById("commentForm");
+  const input = document.getElementById("commentInput");
+  const commentsDiv = document.getElementById("comments");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!input.value.trim()) return;
 
-      if (!input.value.trim()) return;
-
-      await addDoc(commentsRef, {
-        text: input.value,
-        time: serverTimestamp()
-      });
-
-      input.value = "";
+    await addDoc(commentsRef, {
+      text: input.value,
+      time: serverTimestamp()
     });
 
-    const q = query(commentsRef, orderBy("time", "desc"));
+    input.value = "";
+  });
 
-    onSnapshot(q, (snapshot) => {
-      commentsDiv.innerHTML = "";
+  const q = query(commentsRef, orderBy("time", "desc"));
 
-      snapshot.forEach((doc) => {
-        const data = doc.data();
+  onSnapshot(q, (snapshot) => {
+    commentsDiv.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const data = doc.data();
 
-        const div = document.createElement("div");
-        div.className = "comment";
+      const div = document.createElement("div");
+      div.className = "comment";
 
-        const text = document.createElement("p");
-        text.textContent = data.text;
-
-        const time = document.createElement("small");
-        time.textContent = data.time?.toDate
+      div.innerHTML = `
+        <p>${data.text}</p>
+        <small>${data.time?.toDate
           ? data.time.toDate().toLocaleString()
-          : "baru saja";
+          : "baru saja"}</small>
+      `;
 
-        div.appendChild(text);
-        div.appendChild(time);
-
-        commentsDiv.appendChild(div);
-      });
+      commentsDiv.appendChild(div);
     });
-  </script>
+  });
+</script>
 
+  
 </body>
 </html>
