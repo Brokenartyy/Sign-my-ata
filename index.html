@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <!-- Quill CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css"
+  rel="stylesheet"
+/>
   <meta charset="UTF-8" />
   <title>Sign My ATA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -42,6 +47,14 @@
     small {
       color: gray;
     }
+
+    #editor {
+  background: white;
+  border-radius: 10px;
+  min-height: 120px;
+  margin-bottom: 10px;
+    }
+    
   </style>
 </head>
 <body>
@@ -49,9 +62,10 @@
   <h1>🪧 Sign My ATA</h1>
 
   <form id="commentForm">
+    <div id="editor"></div>
     <textarea id="commentInput" rows="3" placeholder="Tulis pesan anonim..." required></textarea>
     <br>
-    <button type="submit">Kirim</button>
+    <button id="sendBtn">Kirim</button>
   </form>
 
   <div id="comments"></div>
@@ -121,6 +135,57 @@
     });
   });
 </script>
+
+  <!-- Quill JS -->
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+
+<script>
+  const content = quill.root.innerHTML;
+  const quill = new Quill('#editor', {
+    theme: 'snow',
+    placeholder: 'Tulis pesan anonim...',
+    modules: {
+      toolbar: [
+        ['bold', 'italic', 'underline'],
+        [{ list: 'bullet' }],
+        ['clean']
+      ]
+    }
+  });
+</script>
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "API_KEY_KAMU",
+    authDomain: "PROJECT.firebaseapp.com",
+    projectId: "PROJECT_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const sendBtn = document.getElementById('sendBtn');
+
+  sendBtn.addEventListener('click', async () => {
+    const content = quill.root.innerHTML;
+
+    if (content.trim() === '<p><br></p>') {
+      alert('Pesan kosong 😭');
+      return;
+    }
+
+    await addDoc(collection(db, "messages"), {
+      content: content,
+      createdAt: serverTimestamp()
+    });
+
+    quill.setText('');
+  });
+  </script>
+  
 
   <!-- so when you gonna tell him,
   that we did that too?
