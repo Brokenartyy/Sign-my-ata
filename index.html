@@ -55,6 +55,7 @@
       border: none;
       background: #ffd6e8;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
     button:hover {
@@ -73,7 +74,7 @@
       margin-top: 6px;
       color: gray;
       font-size: 12px;
-    }
+    }  
   </style>
 </head>
 <body>
@@ -137,13 +138,7 @@
       counter.textContent = `${length} karakter`;
     });
 
-    // SEND MESSAGE
-    sendBtn.addEventListener('click', async () => {
-      const textLength = quill.getText().trim().length;
-      if (textLength === 0) {
-        alert("Pesan kosong 😭");
-        return;
-      }
+    
 
       await addDoc(commentsRef, {
         content: quill.root.innerHTML,
@@ -156,6 +151,7 @@
     // REALTIME LISTENER
     const q = query(commentsRef, orderBy("createdAt", "desc"));
 
+    // BUTTON HANDLER
     onSnapshot(q, (snapshot) => {
       commentsDiv.innerHTML = "";
       snapshot.forEach(doc => {
@@ -164,7 +160,24 @@
         el.className = "comment";
         el.innerHTML = `
           ${d.content}
-          <small>${d.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
+          <small>${d.createdAt?.toDate()?.tsendBtn.addEventListener('click', async () => {
+  // PAKSA editor lepas fokus (INI KUNCINYA)
+  quill.blur();
+
+  const textLength = quill.getText().trim().length;
+  if (textLength === 0) {
+    alert("Pesan kosong 😭");
+    return;
+  }
+
+  await addDoc(commentsRef, {
+    content: quill.root.innerHTML,
+    createdAt: serverTimestamp()
+  });
+
+  quill.setText('');
+});
+oLocaleString() || "baru saja"}</small>
         `;
         commentsDiv.appendChild(el);
       });
