@@ -69,6 +69,8 @@
   </form>
 
   <div id="comments"></div>
+  <div class="message" id="msg"></div>
+  
 
   <!-- FIREBASE -->
   <script type="module">
@@ -134,6 +136,7 @@
       commentsDiv.appendChild(div);
     });
   });
+    msg.innerHTML = data.content;
 </script>
 
   <!-- Quill JS -->
@@ -159,9 +162,9 @@
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "API_KEY_KAMU",
-    authDomain: "PROJECT.firebaseapp.com",
-    projectId: "PROJECT_ID"
+    apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
+    authDomain: "pony-ata.firebaseapp.com",
+    projectId: "pony-ata"
   };
 
   const app = initializeApp(firebaseConfig);
