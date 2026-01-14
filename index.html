@@ -69,21 +69,15 @@
       color: #b86b8b;
       font-weight: bold;
     }
-  </style>
-</head>
-<body>
 
-<h1>🪧 Sign My ATA</h1>
-
-<div id="editor"></div>
-<div id="counter">0 karakter</div>
-<button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
-
-<div id="comments"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
-
-<script type="module">
+    #loading {
+  text-align: center;
+  padding: 40px;
+  font-weight: bold;
+    }
+    
+ <script type="module">
+  // ================= FIREBASE IMPORT =================
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import {
     getFirestore,
@@ -92,9 +86,11 @@
     onSnapshot,
     query,
     orderBy,
-    serverTimestamp
+    serverTimestamp,
+    limit
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+  // ================= CONFIG =================
   const firebaseConfig = {
     apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
     authDomain: "pony-ata.firebaseapp.com",
@@ -103,38 +99,46 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
   const commentsRef = collection(db, "messages");
 
+  // ================= DOM =================
   const commentsDiv = document.getElementById("comments");
   const sendBtn = document.getElementById("sendBtn");
   const counter = document.getElementById("counter");
 
-  // ⬇️ EXPOSE QUILL KE WINDOW (INI KUNCI SEMUANYA)
-  window.quill = new Quill('#editor', {
-    theme: 'snow',
-    placeholder: 'Tulis pesan anonim...',
+  // ================= QUILL (GLOBAL) =================
+  window.quill = new Quill("#editor", {
+    theme: "snow",
+    placeholder: "Tulis pesan anonim...",
     modules: {
       toolbar: [
-        ['bold','italic','underline'],
-        [{ list: 'bullet' }],
-        ['clean']
+        ["bold", "italic", "underline"],
+        [{ list: "bullet" }],
+        ["clean"]
       ]
     }
   });
 
-  // Counter
-  window.quill.on('text-change', () => {
+  // ================= COUNTER =================
+  window.quill.on("text-change", () => {
     const length = window.quill.getText().trim().length;
     counter.textContent = `${length} karakter`;
   });
 
-  // Generate anon name (FITUR BARU 🤫)
+  // ================= RANDOM ANON =================
   function randomAnon() {
-    const list = ["Anon Cat", "Anon Pony", "Anon Ghost", "Anon Star", "Anon Fox"];
+    const list = [
+      "Anon Pony",
+      "Anon Fox",
+      "Anon Ghost",
+      "Anon Star",
+      "Anon Cat"
+    ];
     return list[Math.floor(Math.random() * list.length)];
   }
 
-  // ⬇️ GLOBAL SEND FUNCTION
+  // ================= SEND MESSAGE =================
   window.sendMessage = async function () {
     window.quill.blur();
 
@@ -147,27 +151,42 @@
     sendBtn.disabled = true;
     sendBtn.textContent = "Mengirim...";
 
-    await addDoc(commentsRef, {
-      content: window.quill.root.innerHTML,
-      anon: randomAnon(),
-      createdAt: serverTimestamp()
-    });
+    try {
+      await addDoc(commentsRef, {
+        content: window.quill.root.innerHTML,
+        anon: randomAnon(),
+        createdAt: serverTimestamp()
+      });
 
-    window.quill.setText('');
+      window.quill.setText("");
+    } catch (err) {
+      alert("Gagal kirim pesan 😭");
+      console.error(err);
+    }
+
     sendBtn.disabled = false;
     sendBtn.textContent = "Kirim";
   };
 
-  // Realtime
-  const q = query(commentsRef, orderBy("createdAt","desc"));
-  onSnapshot(q, snap => {
+  // ================= REALTIME LISTENER =================
+  const q = query(
+    commentsRef,
+    orderBy("createdAt", "desc"),
+    limit(20) // biar gak berat
+  );
+
+  onSnapshot(q, (snapshot) => {
+    // hapus loading halaman (kalau ada)
+    document.getElementById("loading")?.remove();
+
     commentsDiv.innerHTML = "";
-    snap.forEach(doc => {
+
+    snapshot.forEach((doc) => {
       const d = doc.data();
       const el = document.createElement("div");
       el.className = "comment";
       el.innerHTML = `
-        <span class="anon">${d.anon}</span>
+        <span class="anon">${d.anon || "Anon"}</span>
         ${d.content}
         <small>${d.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
       `;
@@ -178,3 +197,21 @@
 
 </body>
 </html>
+style>
+</head>
+<body>
+
+<h1>🪧 Sign My ATA</h1>
+
+<div id="editor"></div>
+<div id="counter">0 karakter</div>
+<button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
+
+<div id="comments"></div>
+
+<div id="loading">Loading…</div>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+
+<script type="module">
+  
