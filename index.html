@@ -28,7 +28,7 @@
   <!-- EDITOR PLACEHOLDER -->
   <div id="editor"></div>
   <div id="counter">0 karakter</div>
-  <button id="sendBtn" type="button">Kirim</button>
+  <button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
 
   <!-- COMMENTS LIST -->
   <div id="comments"></div>
@@ -84,23 +84,22 @@
     });
 
     // Send message
-    sendBtn.onclick = async () => {
-      const textLength = quill.getText().trim().length;
-      if (textLength === 0) {
-        alert("Pesan kosong 😭");
-        return;
-      }
-      await addDoc(commentsRef, {
-        content: quill.root.innerHTML,
-        createdAt: serverTimestamp()
-      });
-      quill.setText('');
-    };
+    window.sendMessage = async function () {
+  quill.blur();
 
-    sendBtn.addEventListener("touchstart", async (e) => {
-  e.preventDefault();
-  sendBtn.click();
-});
+  const textLength = quill.getText().trim().length;
+  if (textLength === 0) {
+    alert("Pesan kosong 😭");
+    return;
+  }
+
+  await addDoc(commentsRef, {
+    content: quill.root.innerHTML,
+    createdAt: serverTimestamp()
+  });
+
+  quill.setText('');
+};
 
     // Real-time listener
     const q = query(commentsRef, orderBy("createdAt","desc"));
