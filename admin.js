@@ -12,33 +12,33 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
   authDomain: "pony-ata.firebaseapp.com",
-  projectId: "pony-ata"
+  projectId: "pony-ata",
+  storageBucket: "pony-ata.firebasestorage.app",
+  messagingSenderId: "885964673100",
+  appId: "1:885964673100:web:038c51f39b2a27278aa4e9"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const commentsRef = collection(db, "messages");
 const adminDiv = document.getElementById("adminComments");
+const commentsRef = collection(db, "messages");
 
 const q = query(commentsRef, orderBy("createdAt", "desc"));
 
-onSnapshot(q, (snapshot) => {
+onSnapshot(q, (snap) => {
   adminDiv.innerHTML = "";
 
-  snapshot.forEach((docSnap) => {
+  snap.forEach((docSnap) => {
     const d = docSnap.data();
 
     const box = document.createElement("div");
-    box.style.border = "1px solid #ccc";
-    box.style.padding = "10px";
-    box.style.marginBottom = "10px";
-
     box.innerHTML = `
-      <strong>${d.name}</strong>
+      <p><strong>${d.name || "Anon"}</strong></p>
       ${d.content}
-      <textarea placeholder="Balas sebagai admin..."></textarea>
+      <textarea placeholder="Balas admin..."></textarea>
       <button>Balas</button>
+      <hr>
     `;
 
     const textarea = box.querySelector("textarea");
@@ -60,4 +60,3 @@ onSnapshot(q, (snapshot) => {
     adminDiv.appendChild(box);
   });
 });
-
