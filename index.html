@@ -16,7 +16,9 @@
     button:hover { background: #ffbcd9; }
     .comment { background: white; padding: 12px; margin-top: 12px; border-radius: 10px; }
     .comment small { display: block; margin-top: 6px; color: gray; font-size: 12px; }
-    #sendBtn { position: relative; z-index: 10;}
+    #sendBtn { position: relative; z-index: 10; pointer-events: auto; touch-action: manipulation; }
+   .ql-container, .ql-editor { pointer-events: auto;}   
+   .ql-container { overflow: visible;}
   </style>
 </head>
 <body>
@@ -94,6 +96,11 @@
       });
       quill.setText('');
     };
+
+    sendBtn.addEventListener("touchstart", async (e) => {
+  e.preventDefault();
+  sendBtn.click();
+});
 
     // Real-time listener
     const q = query(commentsRef, orderBy("createdAt","desc"));
