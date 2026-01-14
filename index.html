@@ -165,6 +165,26 @@ button:hover {
   background: white;
   font-size: 14px;
     }
+   #githubInput {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 2px solid #c8fbd8; /* ijo pastel */
+    background: white;
+    font-size: 14px;
+   }
+
+    .github {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 12px;
+  color: #4fa3a5;
+  text-decoration: none;
+}
+.github:hover {
+  text-decoration: underline;
+}
     
   </style>
 </head>
@@ -177,6 +197,11 @@ button:hover {
   type="text"
   placeholder="Nama anon (bebas, boleh kosong)"
   maxlength="30"
+/>
+<input
+  id="githubInput"
+  type="text"
+  placeholder="GitHub (opsional, contoh: https://github.com/username)"
 />
 <div id="editor"></div>
 <div id="counter">0 karakter</div>
@@ -255,6 +280,23 @@ function getAnonName() {
 
   return value;
 }
+
+  // ================= GITHUB LINK =================
+  const githubInput = document.getElementById("githubInput");
+
+function getGithubLink() {
+  const value = githubInput.value.trim();
+
+  if (!value) return null;
+
+  // auto rapihin kalau user cuma nulis username
+  if (!value.startsWith("http")) {
+    return `https://github.com/${value}`;
+  }
+
+  return value;
+}
+  
   // ================= SEND MESSAGE =================
   window.sendMessage = async function () {
     window.quill.blur();
@@ -271,11 +313,15 @@ function getAnonName() {
     try {
     await addDoc(commentsRef, {
     name: getAnonName(),
+    github: getGithubLink(), // 👈 BARU
     content: window.quill.root.innerHTML,
     createdAt: serverTimestamp()
-    });
+  });
+
 
       window.quill.setText("");
+      githubInput.value = "";
+      
     } catch (err) {
       alert("Gagal kirim pesan 😭");
       console.error(err);
@@ -303,10 +349,12 @@ function getAnonName() {
       const el = document.createElement("div");
       el.className = "comment";
       el.innerHTML = `
-    <span class="anon">${d.name || "Anon"}</span>
-    ${d.content}
-    <small>${d.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
-    `;
+  <span class="anon">${d.name || "Anon"}</span>
+  ${d.github ? `<a class="github" href="${d.github}" target="_blank">GitHub</a>` : ""}
+  ${d.content}
+  <small>${d.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
+`;
+
       commentsDiv.appendChild(el);
     });
   });
