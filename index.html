@@ -22,6 +22,92 @@
     body { font-family: system-ui, sans-serif; background: #fff5fa; padding: 20px; }
     h1 { text-align: center; margin-bottom: 20px; }
 
+    /* ================= BASE PASTEL THEME ================= */
+body {
+  background: #fff4b2; /* kuning pastel lembut */
+  color: #333;
+}
+
+h1 {
+  color: #c86491; /* pink pastel deeper */
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* ================= EDITOR & FORM ================= */
+#editor {
+  background: #ffffff;
+  border: 2px solid #ffd1dc; /* border pink pastel */
+  border-radius: 12px;
+  min-height: 120px;
+  margin-bottom: 0.5rem;
+}
+
+#counter {
+  text-align: right;
+  color: #6b6b6b;
+  margin-bottom: 0.8rem;
+}
+
+/* ================= BUTTON ================= */
+button {
+  background: #c8fbd8; /* ijo pastel */
+  color: #333;
+  padding: 0.8rem 1.4rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background: #b2efca; /* sedikit lebih gelap */
+  transform: translateY(-2px);
+}
+
+/* ================= COMMENTS ================= */
+.comment {
+  background: #ffffff;
+  border-left: 6px solid #ffd1dc; /* pink pastel accent */
+  padding: 12px 16px;
+  margin-top: 14px;
+  border-radius: 10px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.comment .anon {
+  display: block;
+  font-size: 12px;
+  color: #4a4a4a;
+  margin-bottom: 4px;
+}
+
+.comment small {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #7a7a7a;
+}
+
+/* ================= LOADING / NOTICE ================= */
+#loading {
+  text-align: center;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #c86491;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 600px) {
+  button {
+    width: 100%;
+  }
+}
+    
+    
     #editor {
       background: white;
       border-radius: 12px;
@@ -74,7 +160,8 @@
 <body>
 
 <h1>🪧 Sign My ATA</h1>
-
+  
+<input id="nameInput" placeholder="Nama anonimmu..." />
 <div id="editor"></div>
 <div id="counter">0 karakter</div>
 <button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
