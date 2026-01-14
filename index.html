@@ -185,6 +185,18 @@ button:hover {
 .github:hover {
   text-decoration: underline;
 }
+
+.reply {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-left: 4px solid #c8fbd8;
+  background: #f4fff8;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.reply strong {
+  color: #4fa3a5;
+}
     
   </style>
 </head>
@@ -352,8 +364,19 @@ function getGithubLink() {
   <span class="anon">${d.name || "Anon"}</span>
   ${d.github ? `<a class="github" href="${d.github}" target="_blank">GitHub</a>` : ""}
   ${d.content}
+
+  ${
+    d.reply
+      ? `<div class="reply">
+           <strong>Admin</strong>
+           ${d.reply.text}
+         </div>`
+      : ""
+  }
+
   <small>${d.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
 `;
+
 
       commentsDiv.appendChild(el);
     });
