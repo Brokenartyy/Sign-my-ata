@@ -155,13 +155,29 @@ button:hover {
       color: #b86b8b;
       font-weight: bold;
     }
+
+    #nameInput {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 2px solid #ffd1dc;
+  background: white;
+  font-size: 14px;
+    }
+    
   </style>
 </head>
 <body>
 
 <h1>🪧 Sign My ATA</h1>
   
-<input id="nameInput" placeholder="Nama anonimmu..." />
+<input
+  id="nameInput"
+  type="text"
+  placeholder="Nama anon (bebas, boleh kosong)"
+  maxlength="30"
+/>
 <div id="editor"></div>
 <div id="counter">0 karakter</div>
 <button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
@@ -221,17 +237,24 @@ button:hover {
   });
 
   // ================= RANDOM ANON =================
-  function randomAnon() {
-    const list = [
+  const nameInput = document.getElementById("nameInput");
+
+function getAnonName() {
+  const value = nameInput.value.trim();
+
+  if (value.length === 0) {
+    const fallback = [
       "Anon Pony",
       "Anon Fox",
       "Anon Ghost",
       "Anon Star",
       "Anon Cat"
     ];
-    return list[Math.floor(Math.random() * list.length)];
+    return fallback[Math.floor(Math.random() * fallback.length)];
   }
 
+  return value;
+}
   // ================= SEND MESSAGE =================
   window.sendMessage = async function () {
     window.quill.blur();
@@ -246,11 +269,11 @@ button:hover {
     sendBtn.textContent = "Mengirim...";
 
     try {
-      await addDoc(commentsRef, {
-        content: window.quill.root.innerHTML,
-        anon: randomAnon(),
-        createdAt: serverTimestamp()
-      });
+    await addDoc(commentsRef, {
+    name: getAnonName(),
+    content: window.quill.root.innerHTML,
+    createdAt: serverTimestamp()
+    });
 
       window.quill.setText("");
     } catch (err) {
@@ -280,10 +303,10 @@ button:hover {
       const el = document.createElement("div");
       el.className = "comment";
       el.innerHTML = `
-        <span class="anon">${d.anon || "Anon"}</span>
-        ${d.content}
-        <small>${d.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
-      `;
+    <span class="anon">${d.name || "Anon"}</span>
+    ${d.content}
+    <small>${d.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
+    `;
       commentsDiv.appendChild(el);
     });
   });
