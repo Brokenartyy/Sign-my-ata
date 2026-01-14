@@ -69,14 +69,21 @@
       color: #b86b8b;
       font-weight: bold;
     }
+  </style>
+</head>
+<body>
 
-    #loading {
-  text-align: center;
-  padding: 40px;
-  font-weight: bold;
-    }
-    
- <script type="module">
+<h1>🪧 Sign My ATA</h1>
+
+<div id="editor"></div>
+<div id="counter">0 karakter</div>
+<button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
+
+<div id="comments"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+
+<script type="module">
   // ================= FIREBASE IMPORT =================
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import {
@@ -195,23 +202,6 @@
   });
 </script>
 
+
 </body>
 </html>
-style>
-</head>
-<body>
-
-<h1>🪧 Sign My ATA</h1>
-
-<div id="editor"></div>
-<div id="counter">0 karakter</div>
-<button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
-
-<div id="comments"></div>
-
-<div id="loading">Loading…</div>
-
-<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
-
-<script type="module">
-  
