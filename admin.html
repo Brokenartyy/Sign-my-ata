@@ -1,14 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Admin – Sign My ATA</title>
 </head>
 <body>
 
 <h2>Admin Panel</h2>
-<div id="adminComments"></div>
+<div id="adminComments">Loading...</div>
 
-<script type="module" src="admin.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    onSnapshot,
+    query,
+    orderBy,
+    updateDoc,
+    doc
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // 🔥 FIREBASE CONFIG (SAMA PERSIS DENGAN INDEX)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
+    authDomain: "pony-ata.firebaseapp.com",
+    projectId: "pony-ata",
+    storageBucket: "pony-ata.firebasestorage.app",
+    messagingSenderId: "885964673100",
+    appId: "1:885964673100:web:038c51f39b2a27278aa4e9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const adminDiv = document.getElementById("adminComments");
+  const commentsRef = collection(db, "messages");
+
+  const q = query(commentsRef, orderBy("createdAt", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    adminDiv.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+      const d = docSnap.data();
+
+      const box = document.createElement("div");
+      box.style.border = "1px solid #ccc";
+      box.style.padding = "10px";
+      box.style.marginBottom = "12px";
+
+      box.innerHTML = `
+        <p><strong>${d.name || "Anon"}</strong></p>
+        ${d.content}
+        <textarea placeholder="Balas sebagai admin..." style="width:100%;margin-top:6px;"></textarea>
+        <button style="margin-top:6px;">Balas</button>
+        <hr>
+      `;
+
+      const textarea = box.querySelector("textarea");
+      const btn = box.querySelector("button");
+
+      btn.onclick = async () => {
+        if (!textarea.value.trim()) return;
+
+        await updateDoc(doc(db, "messages", docSnap.id), {
+          reply: {
+            text: textarea.value,
+            time: new Date()
+          }
+        });
+
+        textarea.value = "";
+      };
+
+      adminDiv.appendChild(box);
+    });
+  });
+</script>
+
 </body>
 </html>
