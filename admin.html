@@ -61,14 +61,54 @@
       border-top: 1px dashed #eee;
       margin: 12px 0;
     }
+
+    .admin-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.reply-btn {
+  flex: 1;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #c8fbd8; /* ijo pastel */
+  color: #2f5f4f;
+  font-weight: 600;
+}
+
+.reply-btn:disabled {
+  opacity: 0.6;
+}
+
+.delete-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #ffd1dc; /* pink pastel */
+  color: #7a2e4a;
+  font-weight: 600;
+}
+
+.delete-btn:hover {
+  background: #ffb8c8;
+} 
+
+.card.replied {
+  border-left: 6px solid #c8fbd8;
+}
   </style>
 </head>
 
 <body>
 <h2>Admin Panel</h2>
 <div id="adminComments">Loading…</div>
-<button class="delete">Hapus</button>
-
+<div class="admin-actions">
+  <button class="reply-btn">Kirim Balasan</button>
+  <button class="delete-btn">Hapus</button>
+</div>
+  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import {
@@ -121,7 +161,7 @@
         <div class="reply-editor"></div>
         <button>Kirim Balasan</button>
       `;
-
+     //============= TEKS EDITOR =============
       adminDiv.appendChild(card);
 
       const editorDiv = card.querySelector(".reply-editor");
@@ -170,6 +210,10 @@ delBtn.onclick = async () => {
 
   await deleteDoc(doc(db, "messages", docSnap.id));
 };
+
+if (d.reply) {
+  card.classList.add("replied");
+}
 </script>
 </body>
 </html>
