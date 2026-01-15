@@ -3,11 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin – Sign My ATA</title>
-</head>
-<body>
 
+  <!-- Quill -->
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #fff7fb;
+      padding: 16px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #c86491;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .name {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .content {
+      margin-bottom: 10px;
+    }
+
+    .reply-editor {
+      height: 100px;
+      background: white;
+      border-radius: 8px;
+    }
+
+    button {
+      margin-top: 8px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      background: #c8fbd8;
+      font-weight: 600;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px dashed #eee;
+      margin: 12px 0;
+    }
+  </style>
+</head>
+
+<body>
 <h2>Admin Panel</h2>
-<div id="adminComments">Loading...</div>
+<div id="adminComments">Loading…</div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -21,7 +80,6 @@
     doc
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // 🔥 FIREBASE CONFIG (SAMA PERSIS DENGAN INDEX)
   const firebaseConfig = {
     apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
     authDomain: "pony-ata.firebaseapp.com",
@@ -36,7 +94,6 @@
 
   const adminDiv = document.getElementById("adminComments");
   const commentsRef = collection(db, "messages");
-
   const q = query(commentsRef, orderBy("createdAt", "desc"));
 
   onSnapshot(q, (snapshot) => {
@@ -45,39 +102,62 @@
     snapshot.forEach((docSnap) => {
       const d = docSnap.data();
 
-      const box = document.createElement("div");
-      box.style.border = "1px solid #ccc";
-      box.style.padding = "10px";
-      box.style.marginBottom = "12px";
+      const card = document.createElement("div");
+      card.className = "card";
 
-      box.innerHTML = `
-        <p><strong>${d.name || "Anon"}</strong></p>
-        ${d.content}
-        <textarea placeholder="Balas sebagai admin..." style="width:100%;margin-top:6px;"></textarea>
-        <button style="margin-top:6px;">Balas</button>
+      card.innerHTML = `
+        <div class="name">${d.name || "Anon"}</div>
+        <div class="content">${d.content}</div>
+
+        ${d.reply ? `
+          <div class="content" style="background:#f4fff8;padding:8px;border-radius:8px;">
+            <strong>Admin:</strong>
+            ${d.reply.text}
+          </div>
+        ` : ""}
+
         <hr>
+        <div class="reply-editor"></div>
+        <button>Kirim Balasan</button>
       `;
 
-      const textarea = box.querySelector("textarea");
-      const btn = box.querySelector("button");
+      adminDiv.appendChild(card);
+
+      const editorDiv = card.querySelector(".reply-editor");
+      const btn = card.querySelector("button");
+
+      const quill = new Quill(editorDiv, {
+        theme: "snow",
+        placeholder: "Balas sebagai admin…",
+        modules: {
+          toolbar: [
+            ["bold", "italic", "underline"],
+            [{ list: "bullet" }],
+            ["clean"]
+          ]
+        }
+      });
 
       btn.onclick = async () => {
-        if (!textarea.value.trim()) return;
+        const plain = quill.getText().trim();
+        if (!plain) return;
+
+        btn.disabled = true;
+        btn.textContent = "Mengirim…";
 
         await updateDoc(doc(db, "messages", docSnap.id), {
           reply: {
-            text: textarea.value,
+            text: quill.root.innerHTML,
             time: new Date()
           }
         });
 
-        textarea.value = "";
+        quill.setText("");
+        btn.disabled = false;
+        btn.textContent = "Kirim Balasan";
       };
-
-      adminDiv.appendChild(box);
     });
   });
 </script>
-
 </body>
 </html>
