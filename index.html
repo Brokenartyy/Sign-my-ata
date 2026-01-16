@@ -226,15 +226,18 @@ button:hover {
 }
 
 /* ==== GIF NGARAH KE ADMIN ======= */
-  #raiden-gif {
-  cursor: pointer;
+  #raiden-wrapper {
+  position: relative;
   max-width: 420px;
   margin: 20px auto;
-  transition: transform 0.2s ease;
 }
 
-#raiden-gif:active {
-  transform: scale(0.98);
+#raiden-admin-hitbox {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background: transparent;
+  z-index: 10;
 }
   </style>
 </head>
@@ -242,20 +245,19 @@ button:hover {
 
 <h1>🪧 Sign My ATA</h1>
 
-<div id="raiden-gif">
+<div id="raiden-wrapper">
   <div class="tenor-gif-embed"
     data-postid="16959263992561836066"
     data-share-method="host"
     data-aspect-ratio="1.76596"
     data-width="100%">
-    <a href="https://tenor.com/view/raiden-fortnite-raiden-fortnite-emote-cat-emote-fortnite-raiden-mgs2-mgs2-raiden-gif-16959263992561836066">
-      Raiden GIF
-    </a>
   </div>
+
+  <!-- LAPISAN ADMIN -->
+  <div id="raiden-admin-hitbox"></div>
 </div>
-
 <script async src="https://tenor.com/embed.js"></script>
-
+  
 <h5>⚠️ Careful, he bites</h5>
   
   <div class="form-box">  
@@ -461,24 +463,16 @@ function getGithubLink() {
 </script>
 
 <script>
-const raidenGif = document.getElementById("raiden-gif");
+const hitbox = document.getElementById("raiden-admin-hitbox");
+let lastTap = 0;
 
-let clickTimer = null;
-
-raidenGif.addEventListener("click", () => {
-  if (clickTimer === null) {
-    clickTimer = setTimeout(() => {
-      clickTimer = null;
-    }, 300);
-  } else {
-    clearTimeout(clickTimer);
-    clickTimer = null;
-
-    // DOUBLE CLICK DETECTED
+hitbox.addEventListener("click", () => {
+  const now = Date.now();
+  if (now - lastTap < 350) {
     window.location.href = "admin.html";
   }
+  lastTap = now;
 });
-</script>
-    
+</script>   
 </body>
 </html>
