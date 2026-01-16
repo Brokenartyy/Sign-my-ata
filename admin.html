@@ -104,20 +104,17 @@
 <body>
 <h2>Admin Panel</h2>
 
-  container.innerHTML += `
+  adminComments.innerHTML += `
   <div class="card">
     <p>${data.content}</p>
 
     <div class="admin-actions">
       <button class="reply-btn">Kirim Balasan</button>
-      <button class="delete-btn" data-id="${doc.id}">
-        Hapus
-      </button>
+      <button class="delete-btn" data-id="${doc.id}">Hapus</button>
     </div>
   </div>
 `;
-  
-</div>
+
   
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
