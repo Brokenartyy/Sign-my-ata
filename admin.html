@@ -103,10 +103,18 @@
 
 <body>
 <h2>Admin Panel</h2>
-<div id="adminComments">Loading…</div>
-<div class="admin-actions">
-  <button class="reply-btn">Kirim Balasan</button>
-  <button class="delete-btn">Hapus</button>
+
+  adminComments.innerHTML += `
+  <div class="card">
+    <p>${data.content}</p>
+
+    <div class="admin-actions">
+      <button class="reply-btn">Kirim Balasan</button>
+      <button class="delete-btn" data-id="${doc.id}">Hapus</button>
+    </div>
+  </div>
+`;
+  
 </div>
   
 <script type="module">
