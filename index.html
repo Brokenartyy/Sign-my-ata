@@ -184,37 +184,39 @@ button:hover {
 }
 
 /* ============== IFRAME ============== */
- /* === RAIDEN MEONG LOCK === */
-.raiden-lock {
-  width: 260px;              /* PAS buat easter egg */
-  aspect-ratio: 16 / 9;      /* landscape */
-  margin: 16px auto;
-  border-radius: 16px;
+ /* === RAIDEN HEADER === */
+.raiden-wrap {
+  max-width: 320px;        /* KUNCI ANTI GEDE */
+  margin: 14px auto 20px;
+  border-radius: 18px;
   overflow: hidden;
-  opacity: 0.95;
-  transition: 0.2s ease;
+  transition: 0.25s ease;
 }
 
-/* nurutin Tenor */
-.raiden-lock .tenor-gif-embed,
-.raiden-lock iframe {
+/* Nurutin Tenor iframe */
+.raiden-wrap iframe,
+.raiden-wrap .tenor-gif-embed {
   width: 100% !important;
-  height: 100% !important;
+  height: auto !important;
 }
 
-/* hover imut */
-.raiden-lock:hover {
-  transform: scale(1.04);
-  opacity: 1;
+/* Hover imut */
+.raiden-wrap:hover {
+  transform: scale(1.05) rotate(-1deg);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
 }
 
-/* mobile */
+/* Mobile lebih sopan */
 @media (max-width: 600px) {
-  .raiden-lock {
-    width: 200px;
+  .raiden-wrap {
+    max-width: 260px;
   }
 }
-    
+
+.raiden-wrap:active {
+  transform: scale(0.97);
+}
+  
   </style>
 </head>
 <body>
