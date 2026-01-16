@@ -184,46 +184,55 @@ button:hover {
 }
 
 /* ============== IFRAME ============== */
- /* === BIG BOSS SIZE LOCK === */
-.bigboss-lock {
-  width: 220px;          /* UKURAN FIX */
-  aspect-ratio: 1 / 1;   /* kotak */
+ /* === RAIDEN MEONG LOCK === */
+.raiden-lock {
+  width: 260px;              /* PAS buat easter egg */
+  aspect-ratio: 16 / 9;      /* landscape */
   margin: 16px auto;
   border-radius: 16px;
   overflow: hidden;
+  opacity: 0.95;
+  transition: 0.2s ease;
 }
 
-/* paksa tenor nurut */
-.bigboss-lock .tenor-gif-embed,
-.bigboss-lock iframe {
+/* nurutin Tenor */
+.raiden-lock .tenor-gif-embed,
+.raiden-lock iframe {
   width: 100% !important;
   height: 100% !important;
 }
 
+/* hover imut */
+.raiden-lock:hover {
+  transform: scale(1.04);
+  opacity: 1;
+}
+
 /* mobile */
 @media (max-width: 600px) {
-  .bigboss-lock {
-    width: 180px;
+  .raiden-lock {
+    width: 200px;
   }
 }
-  
+    
   </style>
 </head>
 <body>
 
 <h1>🪧 Sign My ATA</h1>
 
-<div class="bigboss-lock">
+<div class="raiden-lock">
   <div
     class="tenor-gif-embed"
-    data-postid="12248663"
+    data-postid="16959263992561836066"
     data-share-method="host"
-    data-aspect-ratio="1"
+    data-aspect-ratio="1.76596"
     data-width="100%">
   </div>
 </div>
 
-<script async src="https://tenor.com/embed.js"></script>  
+<script async src="https://tenor.com/embed.js"></script>
+  
   <div class="form-box">  
  <div class="form-wrapper">
 
