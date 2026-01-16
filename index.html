@@ -67,6 +67,70 @@ button:hover {
   transform: translateY(-2px);
 }
 
+/* ================= NAME & GITHUB FORM ================= */
+
+.identity-box {
+  background: #fffdf6;
+  border: 2px solid #ffd1dc;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* label palsu biar keliatan niat */
+.identity-box::before {
+  content: "Identitas (opsional)";
+  font-size: 11px;
+  font-weight: 600;
+  color: #c86491;
+}
+
+/* base input */
+.identity-box input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+  background: #ffffff;
+  transition: 0.2s ease;
+}
+
+/* NAME – lebih dominan */
+.identity-box #nameInput {
+  font-weight: 600;
+  box-shadow: inset 0 0 0 2px #ffd1dc;
+}
+
+/* GITHUB – lebih soft & opsional */
+.identity-box #githubInput {
+  font-size: 13px;
+  background: #f9fffb;
+  box-shadow: inset 0 0 0 2px #c8fbd8;
+}
+
+/* focus effect */
+.identity-box #nameInput:focus {
+  box-shadow:
+    inset 0 0 0 2px #c86491,
+    0 0 0 4px rgba(200, 100, 145, 0.15);
+}
+
+.identity-box #githubInput:focus {
+  box-shadow:
+    inset 0 0 0 2px #4fa3a5,
+    0 0 0 4px rgba(79, 163, 165, 0.18);
+}
+
+/* placeholder lembut */
+.identity-box input::placeholder {
+  color: #aaa;
+}
+    
 /* ================= COMMENTS ================= */
 .comment {
   background: #ffffff;
@@ -82,104 +146,7 @@ button:hover {
   font-size: 12px;
   color: #4a4a4a;
   margin-bottom: 4px;
-/* ================ NAME & GITHUB FORM (FIXED) =============== */
 
-.form-wrapper {
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-/* === IDENTITY BOX === */
-.identity-box {
-  background: #fffdf6;
-  padding: 14px;
-  border-radius: 18px;
-  border: 2px solid #ffd1dc;
-  margin-bottom: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* === INPUT STYLE === */
-#nameInput,
-#githubInput {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 2px solid transparent;
-  background: #ffffff;
-  font-size: 14px;
-  outline: none;
-  transition: 0.2s ease;
-}
-
-/* name lebih dominan */
-#nameInput {
-  font-weight: 600;
-  border-color: #ffd1dc;
-}
-
-/* github lebih soft */
-#githubInput {
-  font-size: 13px;
-  border-color: #c8fbd8;
-  background: #f9fffb;
-}
-
-/* focus effect */
-#nameInput:focus {
-  border-color: #c86491;
-  box-shadow: 0 0 0 3px rgba(200, 100, 145, 0.15);
-}
-
-#githubInput:focus {
-  border-color: #4fa3a5;
-  box-shadow: 0 0 0 3px rgba(79, 163, 165, 0.18);
-}
-
-/* placeholder lembut */
-#nameInput::placeholder,
-#githubInput::placeholder {
-  color: #aaa;
-}  
-  
-/* github link di comment */
-.github {
-  display: inline-block;
-  margin-left: 6px;
-  font-size: 12px;
-  color: #4fa3a5;
-  text-decoration: none;
-}
-
-.github:hover {
-  text-decoration: underline;
-}
-
-.comment small {
-  display: block;
-  margin-top: 6px;
-  font-size: 11px;
-  color: #7a7a7a;
-}
-
-.input-row input {
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-}
-
-.ql-toolbar {
-  padding: 8px 10px;
-  background: #fffdf3;
-}
-
-.identity-box::before {
-  content: "Identitas (opsional)";
-  font-size: 11px;
-  color: #c86491;
-  font-weight: 600;
-  margin-bottom: 2px;
-}
 
 /* ================= LOADING / NOTICE ================= */
 #loading {
