@@ -224,20 +224,33 @@ button:hover {
 .raiden-wrap:active {
   transform: scale(0.97);
 }
-  
+
+/* ==== GIF NGARAH KE ADMIN ======= */
+  #raiden-gif {
+  cursor: pointer;
+  max-width: 420px;
+  margin: 20px auto;
+  transition: transform 0.2s ease;
+}
+
+#raiden-gif:active {
+  transform: scale(0.98);
+}
   </style>
 </head>
 <body>
 
 <h1>🪧 Sign My ATA</h1>
 
-<div class="raiden-lock">
-  <div
-    class="tenor-gif-embed"
+<div id="raiden-gif">
+  <div class="tenor-gif-embed"
     data-postid="16959263992561836066"
     data-share-method="host"
     data-aspect-ratio="1.76596"
     data-width="100%">
+    <a href="https://tenor.com/view/raiden-fortnite-raiden-fortnite-emote-cat-emote-fortnite-raiden-mgs2-mgs2-raiden-gif-16959263992561836066">
+      Raiden GIF
+    </a>
   </div>
 </div>
 
@@ -447,6 +460,25 @@ function getGithubLink() {
   });
 </script>
 
+<script>
+const raidenGif = document.getElementById("raiden-gif");
 
+let clickTimer = null;
+
+raidenGif.addEventListener("click", () => {
+  if (clickTimer === null) {
+    clickTimer = setTimeout(() => {
+      clickTimer = null;
+    }, 300);
+  } else {
+    clearTimeout(clickTimer);
+    clickTimer = null;
+
+    // DOUBLE CLICK DETECTED
+    window.location.href = "admin.html";
+  }
+});
+</script>
+    
 </body>
 </html>
