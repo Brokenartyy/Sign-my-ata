@@ -82,6 +82,60 @@ button:hover {
   font-size: 12px;
   color: #4a4a4a;
   margin-bottom: 4px;
+/* ================ NAME & GITHUB FORM (FIXED) =============== */
+
+.form-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* shared input style */
+#nameInput,
+#githubInput {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  border: 2px solid #ffd1dc;
+  background: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+/* beda aksen dikit biar gak kembar siam */
+#githubInput {
+  border-color: #c8fbd8;
+}
+
+/* focus effect biar hidup */
+#nameInput:focus {
+  border-color: #c86491;
+  box-shadow: 0 0 0 3px rgba(200, 100, 145, 0.15);
+}
+
+#githubInput:focus {
+  border-color: #4fa3a5;
+  box-shadow: 0 0 0 3px rgba(79, 163, 165, 0.18);
+}
+
+/* placeholder lembut */
+#nameInput::placeholder,
+#githubInput::placeholder {
+  color: #aaa;
+}
+
+/* github link di comment */
+.github {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 12px;
+  color: #4fa3a5;
+  text-decoration: none;
+}
+
+.github:hover {
+  text-decoration: underline;
 }
 
 .comment small {
@@ -107,96 +161,6 @@ button:hover {
   }
 }
     
-/* ================ NAME AND GITHUB FORM =============== */
-    #editor {
-      width: 100%
-    }
-
-    #counter {
-      font-size: 12px;
-      color: gray;
-      text-align: right;
-      margin-bottom: 10px;
-    }
-
-    button {
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: none;
-      background: #ffd6e8;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .comment {
-      background: white;
-      padding: 12px;
-      margin-top: 12px;
-      border-radius: 10px;
-    }
-
-    .comment small {
-      display: block;
-      margin-top: 6px;
-      color: gray;
-      font-size: 12px;
-    }
-
-    .anon {
-      font-size: 12px;
-      color: #b86b8b;
-      font-weight: bold;
-    }
-
-  .form-wrapper {
-  max-width: 720px;
-  margin: 0 auto;
-  }
-
-    #nameInput {
-  width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 12px;
-  border-radius: 14px;
-  border: 2px solid #ffd1dc;
-  background: white;
-  font-size: 14px;
-    }
-    
-   #githubInput {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 12px;
-    border-radius: 14px;
-    border: 2px solid #c8fbd8; /* ijo pastel */
-    background: white;
-    font-size: 14px;
-   }
-
-    .github {
-  display: inline-block;
-  margin-left: 6px;
-  font-size: 12px;
-  color: #4fa3a5;
-  text-decoration: none;
-}
-    
-.github:hover {
-  text-decoration: underline;
-}
-
-.ql-toolbar {
-  border-radius: 14px 14px 0 0;
-}
-
-.ql-container {
-  border-radius: 0 0 14px 14px;
-}
 
 /* ============= REPLY STYLING ========= */    
 .reply {
