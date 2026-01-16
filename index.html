@@ -184,17 +184,49 @@ button:hover {
 }
 
 /* ============== IFRAME ============== */
-  iframe {
-  width: 500px;
-  height: 300px; 
-  }  
+  .bigboss-wrapper {
+  max-width: 240px;
+  margin: 16px auto;
+  border-radius: 16px;
+  overflow: hidden;
+  opacity: 0.95;
+  transition: 0.2s ease;
+}
+
+.bigboss-wrapper:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.bigboss-wrapper iframe {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 16px;
+}
+
+@media (max-width: 600px) {
+  .bigboss-wrapper {
+    max-width: 180px;
+  }
+}
   </style>
 </head>
 <body>
 
 <h1>🪧 Sign My ATA</h1>
 
-<div class="tenor-gif-embed" data-postid="12248663" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/metal-gear-solid-snake-big-boss-gif-12248663">Metal Gear GIF</a>from <a href="https://tenor.com/search/metal-gifs">Metal GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+<div class="bigboss-wrapper">
+  <div
+    class="tenor-gif-embed"
+    data-postid="12248663"
+    data-share-method="host"
+    data-aspect-ratio="1"
+    data-width="100%">
+  </div>
+</div>
+
+<script async src="https://tenor.com/embed.js"></script>
+
 <div class="form-box">  
  <div class="form-wrapper">
 
