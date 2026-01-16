@@ -21,11 +21,15 @@
     }
 
     .card {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 12px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
       margin-bottom: 16px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .card.replied {
+      border-left: 6px solid #c8fbd8;
     }
 
     .name {
@@ -37,83 +41,52 @@
       margin-bottom: 10px;
     }
 
+    .reply-box {
+      margin-top: 10px;
+    }
+
     .reply-editor {
-      height: 100px;
+      height: 110px;
       background: white;
       border-radius: 8px;
-    }
-
-    button {
-      margin-top: 8px;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: none;
-      background: #c8fbd8;
-      font-weight: 600;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px dashed #eee;
-      margin: 12px 0;
+      margin-bottom: 8px;
     }
 
     .admin-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
+      display: flex;
+      gap: 10px;
+    }
 
-.reply-btn {
-  flex: 1;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  background: #c8fbd8; /* ijo pastel */
-  color: #2f5f4f;
-  font-weight: 600;
-}
+    .reply-btn {
+      flex: 1;
+      background: #c8fbd8;
+      border: none;
+      border-radius: 10px;
+      padding: 8px;
+      font-weight: 600;
+    }
 
-.reply-btn:disabled {
-  opacity: 0.6;
-}
+    .delete-btn {
+      background: #ffd1dc;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-weight: 600;
+    }
 
-.delete-btn {
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  background: #ffd1dc; /* pink pastel */
-  color: #7a2e4a;
-  font-weight: 600;
-}
-
-.delete-btn:hover {
-  background: #ffb8c8;
-} 
-
-.card.replied {
-  border-left: 6px solid #c8fbd8;
-}
+    .reply-admin {
+      background: #f4fff8;
+      padding: 8px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
   </style>
 </head>
 
 <body>
-<h2>Admin Panel</h2>
+  <h2>Admin Panel</h2>
+  <div id="adminComments"></div>
 
-  <div class="card">
-    <p>${data.content}</p>
-
-    <div class="admin-actions">
-      <button class="reply-btn">Kirim Balasan</button>
-      <button class="delete-btn" data-id="${doc.id}">Hapus</button>
-    </div>
-  </div>
-
-  
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import {
@@ -123,6 +96,7 @@
     query,
     orderBy,
     updateDoc,
+    deleteDoc,
     doc
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -139,8 +113,7 @@
   const db = getFirestore(app);
 
   const adminDiv = document.getElementById("adminComments");
-  const commentsRef = collection(db, "messages");
-  const q = query(commentsRef, orderBy("createdAt", "desc"));
+  const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
 
   onSnapshot(q, (snapshot) => {
     adminDiv.innerHTML = "";
@@ -151,45 +124,43 @@
       const card = document.createElement("div");
       card.className = "card";
 
+      if (d.reply) card.classList.add("replied");
+
       card.innerHTML = `
         <div class="name">${d.name || "Anon"}</div>
         <div class="content">${d.content}</div>
 
         ${d.reply ? `
-          <div class="content" style="background:#f4fff8;padding:8px;border-radius:8px;">
-            <strong>Nanaa</strong>
+          <div class="reply-admin">
+            <strong>Brokenartyy</strong><br>
             ${d.reply.text}
           </div>
         ` : ""}
 
-        <hr>
-        <div class="reply-editor"></div>
-        <button>Kirim Balasan</button>
+        <div class="reply-box">
+          <div class="reply-editor"></div>
+
+          <div class="admin-actions">
+            <button class="reply-btn">Kirim Balasan</button>
+            <button class="delete-btn">Hapus</button>
+          </div>
+        </div>
       `;
-     //============= TEKS EDITOR =============
+
       adminDiv.appendChild(card);
 
-      const editorDiv = card.querySelector(".reply-editor");
-      const btn = card.querySelector("button");
-
-      const quill = new Quill(editorDiv, {
+      const quill = new Quill(card.querySelector(".reply-editor"), {
         theme: "snow",
         placeholder: "Balas sebagai admin…",
         modules: {
-          toolbar: [
-            ["bold", "italic", "underline"],
-            [{ list: "bullet" }],
-            ["clean"]
-          ]
+          toolbar: [["bold", "italic", "underline"], [{ list: "bullet" }], ["clean"]]
         }
       });
 
-      btn.onclick = async () => {
-        const plain = quill.getText().trim();
-        if (!plain) return;
-
-        btn.disabled = true;
-        btn.textContent = "Mengirim…";
+      // === REPLY ===
+      card.querySelector(".reply-btn").onclick = async () => {
+        const text = quill.getText().trim();
+        if (!text) return;
 
         await updateDoc(doc(db, "messages", docSnap.id), {
           reply: {
@@ -199,26 +170,15 @@
         });
 
         quill.setText("");
-        btn.disabled = false;
-        btn.textContent = "Kirim Balasan";
+      };
+
+      // === DELETE ===
+      card.querySelector(".delete-btn").onclick = async () => {
+        if (!confirm("Hapus pesan ini?")) return;
+        await deleteDoc(doc(db, "messages", docSnap.id));
       };
     });
   });
-
-  //============= DELETE MESSAGE =============
-  import { deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-  const delBtn = card.querySelector(".delete");
-
-delBtn.onclick = async () => {
-  if (!confirm("Hapus pesan ini?")) return;
-
-  await deleteDoc(doc(db, "messages", docSnap.id));
-};
-
-if (d.reply) {
-  card.classList.add("replied");
-}
 </script>
 </body>
 </html>
