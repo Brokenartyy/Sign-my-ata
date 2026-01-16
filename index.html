@@ -184,34 +184,27 @@ button:hover {
 }
 
 /* ============== IFRAME ============== */
-  .bigboss-wrapper {
-  max-width: 240px;
+ /* === BIG BOSS SIZE LOCK === */
+.bigboss-lock {
+  width: 220px;          /* UKURAN FIX */
+  aspect-ratio: 1 / 1;   /* kotak */
   margin: 16px auto;
   border-radius: 16px;
   overflow: hidden;
-  opacity: 0.95;
-  transition: 0.2s ease;
 }
 
-.bigboss-wrapper:hover {
-  transform: scale(1.05);
-  opacity: 1;
-}
-
-.bigboss-wrapper iframe {
+/* paksa tenor nurut */
+.bigboss-lock .tenor-gif-embed,
+.bigboss-lock iframe {
   width: 100% !important;
-  height: auto !important;
-  border-radius: 16px;
+  height: 100% !important;
 }
 
+/* mobile */
 @media (max-width: 600px) {
-  .bigboss-wrapper {
-    max-width: 180px;
+  .bigboss-lock {
+    width: 180px;
   }
-}
-
-.tenor-gif-embed {
-  max-width: 100% !important;
 }
   
   </style>
@@ -220,7 +213,7 @@ button:hover {
 
 <h1>🪧 Sign My ATA</h1>
 
-<div class="bigboss-wrapper">
+<div class="bigboss-lock">
   <div
     class="tenor-gif-embed"
     data-postid="12248663"
@@ -230,14 +223,14 @@ button:hover {
   </div>
 </div>
 
-<script async src="https://tenor.com/embed.js"></script>
-
-<div class="form-box">  
+<script async src="https://tenor.com/embed.js"></script>  
+  <div class="form-box">  
  <div class="form-wrapper">
 
   <div class="identity-box">
     <input id="nameInput" placeholder="Nama anon (bebas, boleh)" />
-    <input id="githubInput" placeholder="GitHub (opsional, contoh: username)" />
+   
+ <input id="githubInput" placeholder="GitHub (opsional, contoh: username)" />
   </div>
 
   <!-- quill toolbar -->
