@@ -89,31 +89,45 @@ button:hover {
   margin: 0 auto;
 }
 
-/* shared input style */
+/* === IDENTITY BOX === */
+.identity-box {
+  background: #fffdf6;
+  padding: 14px;
+  border-radius: 18px;
+  border: 2px solid #ffd1dc;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* === INPUT STYLE === */
 #nameInput,
 #githubInput {
   width: 100%;
   padding: 12px 14px;
-  margin-bottom: 12px;
   border-radius: 14px;
-  border: 2px solid #ffd1dc;
+  border: 2px solid transparent;
   background: #ffffff;
   font-size: 14px;
   outline: none;
   transition: 0.2s ease;
 }
 
+/* name lebih dominan */
 #nameInput {
-  flex: 2;
-}  
-
-/* beda aksen dikit biar gak kembar siam */
-#githubInput {
-  border-color: #c8fbd8;
-  flex: 1.3;
+  font-weight: 600;
+  border-color: #ffd1dc;
 }
 
-/* focus effect biar hidup */
+/* github lebih soft */
+#githubInput {
+  font-size: 13px;
+  border-color: #c8fbd8;
+  background: #f9fffb;
+}
+
+/* focus effect */
 #nameInput:focus {
   border-color: #c86491;
   box-shadow: 0 0 0 3px rgba(200, 100, 145, 0.15);
@@ -128,8 +142,8 @@ button:hover {
 #nameInput::placeholder,
 #githubInput::placeholder {
   color: #aaa;
-}
-
+}  
+  
 /* github link di comment */
 .github {
   display: inline-block;
@@ -158,7 +172,14 @@ button:hover {
   padding: 8px 10px;
   background: #fffdf3;
 }
-  
+
+.identity-box::before {
+  content: "Identitas (opsional)";
+  font-size: 11px;
+  color: #c86491;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
 
 /* ================= LOADING / NOTICE ================= */
 #loading {
@@ -202,15 +223,21 @@ button:hover {
 <h1>🪧 Sign My ATA</h1>
   
 <div class="form-box">  
-  
-<div class="input-row">
-  <input id="nameInput" placeholder="Nama anon (bebas, boleh)" />
-  <input id="githubInput" placeholder="GitHub (opsional, contoh: username)" />
-</div>
-  
-<div id="editor"></div>
-</div>  
-  
+ <div class="form-wrapper">
+
+  <div class="identity-box">
+    <input id="nameInput" placeholder="Nama anon (bebas, boleh)" />
+    <input id="githubInput" placeholder="GitHub (opsional, contoh: username)" />
+  </div>
+
+  <!-- quill toolbar -->
+  <div id="toolbar"></div>
+
+  <!-- editor -->
+  <div id="editor"></div>
+
+ </div> 
+
 <div id="counter">0 karakter</div>
 <button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
 
