@@ -104,12 +104,15 @@
 <body>
 <h2>Admin Panel</h2>
 
-  adminComments.innerHTML += `
+  container.innerHTML += `
   <div class="card">
     <p>${data.content}</p>
 
     <div class="admin-actions">
-      <button class="delete-btn" data-id="${doc.id}">Hapus</button>
+      <button class="reply-btn">Kirim Balasan</button>
+      <button class="delete-btn" data-id="${doc.id}">
+        Hapus
+      </button>
     </div>
   </div>
 `;
