@@ -191,34 +191,77 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 /* ================= MAGIC LINK SEND ================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getAuth,
+  sendSignInLinkToEmail,
+  signInWithEmailLink,
+  isSignInWithEmailLink,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  updateDoc,
+  doc,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* ================= CONFIG ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
+  authDomain: "pony-ata.firebaseapp.com",
+  projectId: "pony-ata"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+/* ================= SEND MAGIC LINK ================= */
 sendLinkBtn.onclick = async () => {
   const email = emailInput.value.trim();
   if (!email) return alert("Email kosong 🗿");
 
-  const actionCodeSettings = {
-    url: window.location.href,
-    handleCodeInApp: true
-  };
+  try {
+    await sendSignInLinkToEmail(auth, email, {
+      // 🔥 FIX PALING PENTING
+      url: window.location.origin,
+      handleCodeInApp: true
+    });
 
-  await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-  localStorage.setItem("adminEmail", email);
-
-  alert("📩 Magic link dikirim. Cek email!");
+    localStorage.setItem("adminEmail", email);
+    alert("📩 Magic link terkirim! Cek inbox / spam ✨");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Gagal kirim magic link. Cek console.");
+  }
 };
 
-/* ================= MAGIC LINK CONFIRM ================= */
+/* ================= CONFIRM MAGIC LINK ================= */
 if (isSignInWithEmailLink(auth, window.location.href)) {
   const email = localStorage.getItem("adminEmail");
+
   if (!email) {
     alert("Email admin tidak ditemukan 😭");
   } else {
-    await signInWithEmailLink(auth, email, window.location.href);
-    localStorage.removeItem("adminEmail");
+    try {
+      await signInWithEmailLink(auth, email, window.location.href);
+      localStorage.removeItem("adminEmail");
+    } catch (err) {
+      console.error(err);
+      alert("❌ Magic link invalid / expired");
+    }
   }
 }
 
 /* ================= AUTH GATE ================= */
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, (user) => {
   if (!user) {
     loginBox.hidden = false;
     adminBox.hidden = true;
@@ -226,7 +269,6 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // 👉 ADMIN ONLY (email check optional, rules tetap utama)
   loginBox.hidden = true;
   adminBox.hidden = false;
   title.textContent = "👑 Admin Panel";
@@ -251,12 +293,17 @@ onAuthStateChanged(auth, async (user) => {
       `;
 
       box.querySelector("button").onclick = async () => {
-        await updateDoc(doc(db, "messages", d.id), {
-          reply: {
-            text: box.querySelector("textarea").value,
-            at: new Date()
-          }
-        });
+        try {
+          await updateDoc(doc(db, "messages", d.id), {
+            reply: {
+              text: box.querySelector("textarea").value,
+              at: serverTimestamp() // 🔥 SESUAI RULES
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          alert("❌ Gagal reply (cek rules)");
+        }
       };
 
       messages.appendChild(box);
@@ -266,6 +313,7 @@ onAuthStateChanged(auth, async (user) => {
 
 /* ================= LOGOUT ================= */
 logoutBtn.onclick = () => signOut(auth);
+
 </script>
 
 </body>
