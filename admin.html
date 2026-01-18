@@ -2,183 +2,108 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Admin – Sign My ATA</title>
-
-  <!-- Quill -->
-  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
-  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #fff7fb;
-      padding: 16px;
-    }
-
-    h2 {
-      text-align: center;
-      color: #c86491;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    .card.replied {
-      border-left: 6px solid #c8fbd8;
-    }
-
-    .name {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .content {
-      margin-bottom: 10px;
-    }
-
-    .reply-box {
-      margin-top: 10px;
-    }
-
-    .reply-editor {
-      height: 110px;
-      background: white;
-      border-radius: 8px;
-      margin-bottom: 8px;
-    }
-
-    .admin-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .reply-btn {
-      flex: 1;
-      background: #c8fbd8;
-      border: none;
-      border-radius: 10px;
-      padding: 8px;
-      font-weight: 600;
-    }
-
-    .delete-btn {
-      background: #ffd1dc;
-      border: none;
-      border-radius: 10px;
-      padding: 8px 14px;
-      font-weight: 600;
-    }
-
-    .reply-admin {
-      background: #f4fff8;
-      padding: 8px;
-      border-radius: 8px;
-      margin-top: 8px;
-    }
-  </style>
+  <title>Admin Panel</title>
 </head>
+<body>
 
-<body>  
-  <h2>Admin Panel</h2>
-  <div id="adminComments"></div>
+<h2>Admin Panel</h2>
+
+<div id="loginBox">
+  <input id="email" placeholder="Email admin">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="adminBox" hidden>
+  <h3>Balas Pesan</h3>
+  <div id="messages"></div>
+</div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    onSnapshot,
-    query,
-    orderBy,
-    updateDoc,
-    deleteDoc,
-    doc
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
-    authDomain: "pony-ata.firebaseapp.com",
-    projectId: "pony-ata",
-    storageBucket: "pony-ata.firebasestorage.app",
-    messagingSenderId: "885964673100",
-    appId: "1:885964673100:web:038c51f39b2a27278aa4e9"
-  };
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  updateDoc,
+  doc,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const firebaseConfig = {
+  apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
+  authDomain: "pony-ata.firebaseapp.com",
+  projectId: "pony-ata"
+};
 
-  const adminDiv = document.getElementById("adminComments");
-  const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  onSnapshot(q, (snapshot) => {
-    adminDiv.innerHTML = "";
+// 👉 LOGIN
+loginBtn.onclick = async () => {
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      email.value,
+      password.value
+    );
+  } catch (e) {
+    alert("❌ Login gagal");
+  }
+};
 
-    snapshot.forEach((docSnap) => {
-      const d = docSnap.data();
+// 👉 GATE UTAMA
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    // BELUM LOGIN → CUMA LIHAT LOGIN
+    loginBox.hidden = false;
+    adminBox.hidden = true;
+    title.textContent = "🔒 Admin Login";
+    return;
+  }
 
-      const card = document.createElement("div");
-      card.className = "card";
+  // SUDAH LOGIN → ADMIN PANEL
+  loginBox.hidden = true;
+  adminBox.hidden = false;
+  title.textContent = "👑 Admin Panel";
 
-      if (d.reply) card.classList.add("replied");
+  const q = query(
+    collection(db, "messages"),
+    orderBy("createdAt", "desc")
+  );
 
-      card.innerHTML = `
-        <div class="name">${d.name || "Anon"}</div>
-        <div class="content">${d.content}</div>
+  onSnapshot(q, (snap) => {
+    messages.innerHTML = "";
+    snap.forEach(d => {
+      const data = d.data();
+      const el = document.createElement("div");
 
-        ${d.reply ? `
-          <div class="reply-admin">
-            <strong>Brokenartyy</strong><br>
-            ${d.reply.text}
-          </div>
-        ` : ""}
-
-        <div class="reply-box">
-          <div class="reply-editor"></div>
-
-          <div class="admin-actions">
-            <button class="reply-btn">Kirim Balasan</button>
-            <button class="delete-btn">Hapus</button>
-          </div>
-        </div>
+      el.innerHTML = `
+        <p><b>${data.name}</b></p>
+        <div>${data.content}</div>
+        <textarea placeholder="Balasan admin...">${data.reply?.text || ""}</textarea>
+        <button>Reply</button>
       `;
 
-      adminDiv.appendChild(card);
-
-      const quill = new Quill(card.querySelector(".reply-editor"), {
-        theme: "snow",
-        placeholder: "Balas sebagai admin…",
-        modules: {
-          toolbar: [["bold", "italic", "underline"], [{ list: "bullet" }], ["clean"]]
-        }
-      });
-
-      // === REPLY ===
-      card.querySelector(".reply-btn").onclick = async () => {
-        const text = quill.getText().trim();
-        if (!text) return;
-
-        await updateDoc(doc(db, "messages", docSnap.id), {
-          reply: {
-            text: quill.root.innerHTML,
-            time: new Date()
-          }
+      el.querySelector("button").onclick = async () => {
+        await updateDoc(doc(db, "messages", d.id), {
+          reply: { text: el.querySelector("textarea").value }
         });
-
-        quill.setText("");
       };
 
-      // === DELETE ===
-      card.querySelector(".delete-btn").onclick = async () => {
-        if (!confirm("Hapus pesan ini?")) return;
-        await deleteDoc(doc(db, "messages", docSnap.id));
-      };
+      messages.appendChild(el);
     });
   });
-</script> 
+});
+</script>
+
 </body>
 </html>
