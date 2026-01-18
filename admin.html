@@ -115,29 +115,31 @@
     transform: translateY(-1px);
   }
   </style>
-  
 </head>
 <body>
 
-<h2>Admin Panel</h2>
+<h2 id="title">🔒 Admin Login</h2>
 
 <div id="loginBox">
-  <input id="email" placeholder="Email admin">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
+  <input id="emailInput" placeholder="Email admin">
+  <button id="sendLinkBtn">Kirim Magic Link</button>
 </div>
 
 <div id="adminBox" hidden>
-  <h3>Balas Pesan</h3>
+  <h2>👑 Admin Panel</h2>
   <div id="messages"></div>
+  <button id="logoutBtn">Logout</button>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged
+  sendSignInLinkToEmail,
+  signInWithEmailLink,
+  isSignInWithEmailLink,
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 import {
@@ -150,6 +152,7 @@ import {
   orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* ================= CONFIG ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
   authDomain: "pony-ata.firebaseapp.com",
@@ -160,30 +163,43 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 👉 LOGIN
-loginBtn.onclick = async () => {
-  try {
-    await signInWithEmailAndPassword(
-      auth,
-      email.value,
-      password.value
-    );
-  } catch (e) {
-    alert("❌ Login gagal");
-  }
+/* ================= MAGIC LINK SEND ================= */
+sendLinkBtn.onclick = async () => {
+  const email = emailInput.value.trim();
+  if (!email) return alert("Email kosong 🗿");
+
+  const actionCodeSettings = {
+    url: window.location.href,
+    handleCodeInApp: true
+  };
+
+  await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+  localStorage.setItem("adminEmail", email);
+
+  alert("📩 Magic link dikirim. Cek email!");
 };
 
-// 👉 GATE UTAMA
+/* ================= MAGIC LINK CONFIRM ================= */
+if (isSignInWithEmailLink(auth, window.location.href)) {
+  const email = localStorage.getItem("adminEmail");
+  if (!email) {
+    alert("Email admin tidak ditemukan 😭");
+  } else {
+    await signInWithEmailLink(auth, email, window.location.href);
+    localStorage.removeItem("adminEmail");
+  }
+}
+
+/* ================= AUTH GATE ================= */
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    // BELUM LOGIN → CUMA LIHAT LOGIN
     loginBox.hidden = false;
     adminBox.hidden = true;
     title.textContent = "🔒 Admin Login";
     return;
   }
 
-  // SUDAH LOGIN → ADMIN PANEL
+  // 👉 ADMIN ONLY (email check optional, rules tetap utama)
   loginBox.hidden = true;
   adminBox.hidden = false;
   title.textContent = "👑 Admin Panel";
@@ -197,25 +213,32 @@ onAuthStateChanged(auth, async (user) => {
     messages.innerHTML = "";
     snap.forEach(d => {
       const data = d.data();
-      const el = document.createElement("div");
+      const box = document.createElement("div");
+      box.className = "admin-card";
 
-      el.innerHTML = `
+      box.innerHTML = `
         <p><b>${data.name}</b></p>
         <div>${data.content}</div>
         <textarea placeholder="Balasan admin...">${data.reply?.text || ""}</textarea>
         <button>Reply</button>
       `;
 
-      el.querySelector("button").onclick = async () => {
+      box.querySelector("button").onclick = async () => {
         await updateDoc(doc(db, "messages", d.id), {
-          reply: { text: el.querySelector("textarea").value }
+          reply: {
+            text: box.querySelector("textarea").value,
+            at: new Date()
+          }
         });
       };
 
-      messages.appendChild(el);
+      messages.appendChild(box);
     });
   });
 });
+
+/* ================= LOGOUT ================= */
+logoutBtn.onclick = () => signOut(auth);
 </script>
 
 </body>
