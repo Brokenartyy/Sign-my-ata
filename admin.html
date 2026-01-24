@@ -177,12 +177,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-/* ========== (CODE SEMENTARA) ============ */
-firebase.auth().createUserWithEmailAndPassword(
-  "dummy-init@init.com",
-  "dummyPassword123!"
-).catch(e => console.log("Init:", e.code));
-
 /* ================= SEND MAGIC LINK ================= */
 sendLinkBtn.onclick = async () => {
   const email = emailInput.value.trim();
