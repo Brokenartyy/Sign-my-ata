@@ -182,10 +182,12 @@ sendLinkBtn.onclick = async () => {
   const email = emailInput.value.trim();
   if (!email) return alert("Email kosong 🗿");
 
-  const actionCodeSettings = {
-    url: window.location.origin + "/admin.html",
-    handleCodeInApp: true
-  };
+ const actionCodeSettings = {
+  url: "https://brokenartyy.github.io/Sign-my-ata/admin.html",
+  handleCodeInApp: true
+};
+
+await sendSignInLinkToEmail(auth, email, actionCodeSettings);
 
   try {
     await auth.sendSignInLinkToEmail(email, actionCodeSettings);
