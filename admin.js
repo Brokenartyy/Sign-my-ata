@@ -1,3 +1,6 @@
+const sendLinkBtn = document.getElementById("sendLinkBtn");
+const emailInput = document.getElementById("emailInput");
+
 /* ================= CONFIG ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
@@ -25,7 +28,7 @@ sendLinkBtn.onclick = async () => {
   };
 
   try {
-    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+    await auth.sendSignInLinkToEmail(email, actionCodeSettings);
     localStorage.setItem("adminEmail", email);
     alert("📩 Magic link terkirim! Cek inbox / spam ✨");
   } catch (err) {
