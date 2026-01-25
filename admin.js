@@ -14,24 +14,26 @@ const db = firebase.firestore();
 /* ================= SEND MAGIC LINK ================= */
 sendLinkBtn.onclick = async () => {
   const email = emailInput.value.trim();
-  if (!email) return alert("Email kosong 🗿");
+  if (!email) {
+    alert("Email kosong 🗿");
+    return;
+  }
 
- const actionCodeSettings = {
-  url: "https://brokenartyy.github.io/Sign-my-ata/admin.html",
-  handleCodeInApp: true
-};
-
-await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+  const actionCodeSettings = {
+    url: "https://brokenartyy.github.io/Sign-my-ata/admin.html",
+    handleCodeInApp: true
+  };
 
   try {
-    await auth.sendSignInLinkToEmail(email, actionCodeSettings);
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
     localStorage.setItem("adminEmail", email);
     alert("📩 Magic link terkirim! Cek inbox / spam ✨");
   } catch (err) {
-    console.error(err);
-    alert("❌ Gagal kirim magic link. Cek console.");
+    console.error("SEND LINK ERROR:", err.code, err.message);
+    alert("❌ Gagal kirim magic link: " + err.code);
   }
 };
+
 
 /* ================= CONFIRM MAGIC LINK ================= */
 if (auth.isSignInWithEmailLink(window.location.href)) {
