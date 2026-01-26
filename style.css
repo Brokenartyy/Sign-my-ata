@@ -1,0 +1,182 @@
+body { font-family: system-ui, sans-serif; background: #fff5fa; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 20px; }
+
+    /* ================= BASE PASTEL THEME ================= */
+body {
+  background-image: url("https://id.pinterest.com/pin/888053620449914737/sent/?invite_code=282c6fd52cc743b290e2d1787422833a&sfo=1");
+  background-repeat: no-repeat;
+  background-position: center 40px;
+  background-size: 260px;
+}
+
+
+h1 {
+  color: #c86491; /* pink pastel deeper */
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+h5 {
+  color: #c86491;
+  text-align: center;
+}
+
+/* ================= EDITOR & FORM ================= */
+#editor {
+  background: #ffffff;
+  border: 2px solid #ffd1dc; /* border pink pastel */
+  border-radius: 12px;
+  min-height: 120px;
+  margin-bottom: 0.5rem;
+}
+
+#counter {
+  text-align: right;
+  color: #6b6b6b;
+  margin-bottom: 0.8rem;
+}
+
+/* ================= BUTTON ================= */
+button {
+  background: #c8fbd8; /* ijo pastel */
+  color: #333;
+  padding: 0.8rem 1.4rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background: #b2efca; /* sedikit lebih gelap */
+  transform: translateY(-2px);
+}
+
+/* ================= NAME & GITHUB FORM ================= */
+
+.identity-box {
+  background: #fffdf6;
+  border: 2px solid #ffd1dc;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* label palsu biar keliatan niat */
+.identity-box::before {
+  content: "Identitas (opsional)";
+  font-size: 11px;
+  font-weight: 600;
+  color: #c86491;
+}
+
+/* base input */
+.identity-box input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+  background: #ffffff;
+  transition: 0.2s ease;
+}
+
+/* NAME – lebih dominan */
+.identity-box #nameInput {
+  font-weight: 600;
+  box-shadow: inset 0 0 0 2px #ffd1dc;
+}
+
+/* GITHUB – lebih soft & opsional */
+.identity-box #githubInput {
+  font-size: 13px;
+  background: #f9fffb;
+  box-shadow: inset 0 0 0 2px #c8fbd8;
+}
+
+/* focus effect */
+.identity-box #nameInput:focus {
+  box-shadow:
+    inset 0 0 0 2px #c86491,
+    0 0 0 4px rgba(200, 100, 145, 0.15);
+}
+
+.identity-box #githubInput:focus {
+  box-shadow:
+    inset 0 0 0 2px #4fa3a5,
+    0 0 0 4px rgba(79, 163, 165, 0.18);
+}
+
+/* placeholder lembut */
+.identity-box input::placeholder {
+  color: #aaa;
+}
+    
+/* ================= COMMENTS ================= */
+.comment {
+  background: #ffffff;
+  border-left: 6px solid #ffd1dc; /* pink pastel accent */
+  padding: 12px 16px;
+  margin-top: 14px;
+  border-radius: 10px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.comment .anon {
+  display: block;
+  font-size: 12px;
+  color: #4a4a4a;
+  margin-bottom: 4px;
+
+
+/* ================= LOADING / NOTICE ================= */
+#loading {
+  text-align: center;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #c86491;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 600px) {
+  button {
+    width: 100%;
+  }
+}
+
+  @media (max-width: 600px) {
+  .input-row {
+    flex-direction: column;
+  }
+  }
+
+/* ============= REPLY STYLING ========= */    
+.reply {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-left: 4px solid #c8fbd8;
+  background: #f4fff8;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.reply strong {
+  color: #4fa3a5;
+}
+
+/* ============== RAIDEN WRAPPER ============== */
+#raiden-wrapper {
+  width: 320px;
+  margin: 20px auto; /* CENTER */
+}
+
+#raiden-wrapper img {
+  width: 100%;
+  display: block; /* ini penting */
+}
