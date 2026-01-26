@@ -14,10 +14,10 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-auth.onAuthStateChanged(async (user) => { 
+auth.onAuthStateChanged(async (user) => {
   if (!user) return;
 
-  const ref = db.collection("users").doc(user.uid); // firestore versi compat
+  const ref = db.collection("users").doc(user.uid);
   const snap = await ref.get();
 
   if (!snap.exists) {
@@ -29,6 +29,7 @@ auth.onAuthStateChanged(async (user) => {
     document.body.classList.add("is-admin");
   }
 });
+
 
 /* ================= SEND MAGIC LINK ================= */
 sendLinkBtn.onclick = async () => {
