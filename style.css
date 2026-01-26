@@ -172,7 +172,8 @@ button:hover {
 
 /* ============== RAIDEN WRAPPER ============== */
 #raiden-wrapper {
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 #raiden-wrapper img {
@@ -180,3 +181,7 @@ button:hover {
   max-width: 90%;
 }
 
+#raiden-wrapper img {
+  border-radius: 16px;
+  display: inline-block;
+}
