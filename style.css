@@ -25,6 +25,7 @@ h1 {
 
 h5 {
   font-family: 'VT323', monospace;
+  line-height: 1.6;
   text-align: center;
   color: #c86491;
   margin: 10px 0 18px;
@@ -88,6 +89,7 @@ h5 {
 /* NAME */
 #nameInput {
   font-family: 'VT323', monospace;
+  line-height: 1.6;
   font-weight: 600;
   box-shadow: inset 0 0 0 2px #ffd1dc;
 }
@@ -95,6 +97,7 @@ h5 {
 /* GITHUB */
 #githubInput {
   font-family: 'VT323', monospace;
+  line-height: 1.6;
   font-size: 13px;
   box-shadow: inset 0 0 0 2px #c8fbd8;
 }
