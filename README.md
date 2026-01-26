@@ -38,8 +38,7 @@ Instead, I got:
 - Errors that appear out of nowhere
 
 Fixing one issue often creates three new ones.  
-Very on brand with the project theme.
-
+Very on brand with the Olivia Rodrigo's song. (now playing url)
 ---
 
 ## 🛠 Tech Stack
