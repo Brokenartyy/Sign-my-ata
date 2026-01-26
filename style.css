@@ -1,10 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 /* ================= RESET & BASE ================= */
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: var(--pixel-font);
+  font-family: 'Press Start 2P', monospace;
   letter-spacing: 0.5px;
   background: #fff5fa;
   padding: 20px;
