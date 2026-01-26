@@ -2,7 +2,6 @@
 
 > trying to beat atabook.org and now i'm fed up with all security errors
 
-🎵 **Now Playing**  
 [![Now Playing: 1 step forward, 3 steps back](https://img.shields.io/badge/Now%20Playing-1%20step%20forward%2C%203%20steps%20back-1DB954?style=for-the-badge&logo=spotify&logoColor=white)](https://open.spotify.com/track/4wcBRRpIfesgcyUtis7PEg)
 
 ---
