@@ -53,64 +53,53 @@ button:hover {
   background: #fffdf6;
   border: 1.5px solid #ffd1dc;
   border-radius: 14px;
-  padding: 10px;
-  margin-bottom: 12px;
+  padding: 10px 12px;
+  margin: 0 auto 14px;
 
   display: flex;
   gap: 8px;
+  justify-content: center;
+  max-width: 360px;   /* ⬅️ KUNCI UTAMA */
 }
 
-.identity-box::before {
-  content: "Identitas (opsional)";
-  position: absolute;
-  opacity: 0; /* BIKIN DIA DIAM */
-}
-
-/* base input */
+/* input jangan serakah */
 .identity-box input {
+  width: auto;
+  max-width: 160px;  /* ⬅️ POTONG LEBAR */
   height: 34px;
   padding: 0 10px;
   border-radius: 12px;
   border: none;
   font-size: 12px;
-  outline: none;
-  background: #ffffff;
+  background: #fff;
 }
 
-/* NAME */
+/* name sedikit lebih panjang */
 #nameInput {
-  flex: 1.3;
+  max-width: 190px;
   font-weight: 600;
   box-shadow: inset 0 0 0 1.5px #ffd1dc;
 }
 
-/* GITHUB */
+/* github lebih pendek */
 #githubInput {
-  flex: 1;
+  max-width: 140px;
   font-size: 11px;
-  background: #f9fffb;
   box-shadow: inset 0 0 0 1.5px #c8fbd8;
-}
-
-/* focus */
-#nameInput:focus {
-  box-shadow: inset 0 0 0 1.5px #c86491;
-}
-
-#githubInput:focus {
-  box-shadow: inset 0 0 0 1.5px #4fa3a5;
 }
 
 /* mobile */
 @media (max-width: 600px) {
   .identity-box {
     flex-direction: column;
+    max-width: 240px;
   }
 
   .identity-box input {
-    height: 32px;
+    max-width: 100%;
   }
 }
+
 
 /* ================= COMMENTS ================= */
 .comment {
