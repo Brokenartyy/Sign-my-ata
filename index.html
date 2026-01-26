@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <script
+  async
+  defer
+  src="https://tenor.com/embed.js">
+  </script>
   <meta charset="UTF-8" />
   <title>Sign My ATA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -193,7 +198,7 @@ button:hover {
 
 /* ============== IFRAME ============== */
  /* === RAIDEN HEADER === */
-.raiden-wrap {
+.raiden-wrapper {
   max-width: 320px;        /* KUNCI ANTI GEDE */
   margin: 14px auto 20px;
   border-radius: 18px;
@@ -202,17 +207,17 @@ button:hover {
 }
 
 /* Nurutin Tenor iframe */
-.raiden-wrap iframe,
-.raiden-wrap .tenor-gif-embed {
+.tenor-gif-embed {
   width: 100% !important;
-  height: auto !important;
+  height: 220px !important; /* FIXED */
+  overflow: hidden;
 }
 
 /* Hover imut */
-.raiden-wrap:hover {
-  transform: scale(1.05) rotate(-1deg);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+.raiden-wrapper:hover {
+  transform: scale(1.05);
 }
+
 
 /* Mobile lebih sopan */
 @media (max-width: 600px) {
@@ -221,7 +226,7 @@ button:hover {
   }
 }
 
-.raiden-wrap:active {
+.raiden-wrapper:active {
   transform: scale(0.97);
 }
 
