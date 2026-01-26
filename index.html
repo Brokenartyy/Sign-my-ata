@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <script
-  async
-  defer
-  src="https://tenor.com/embed.js">
-  </script>
   <meta charset="UTF-8" />
   <title>Sign My ATA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -236,18 +231,5 @@ function getGithubLink() {
     });
   });
 </script>
-
-<script>
-const hitbox = document.getElementById("raiden-admin-hitbox");
-let lastTap = 0;
-
-hitbox.addEventListener("click", () => {
-  const now = Date.now();
-  if (now - lastTap < 350) {
-    window.location.href = "admin.html";
-  }
-  lastTap = now;
-});
-</script>   
 </body>
 </html>
