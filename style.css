@@ -4,7 +4,8 @@
 }
 
 body {
-  font-family: system-ui, sans-serif;
+  font-family: var(--pixel-font);
+  letter-spacing: 0.5px;
   background: #fff5fa;
   padding: 20px;
 }
@@ -25,7 +26,6 @@ h5 {
 }
 
 /* ================= GLOBAL WIDTH CONTROL ================= */
-/* INI PENGGARIS UTAMA */
 .form-wrapper,
 #raiden-wrapper,
 #counter,
