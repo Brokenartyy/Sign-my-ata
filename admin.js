@@ -14,13 +14,13 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-onAuthStateChanged(auth, async (user) => {
+auth.onAuthStateChanged(async (user) => { 
   if (!user) return;
 
-  const ref = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
+  const ref = db.collection("users").doc(user.uid); // firestore versi compat
+  const snap = await ref.get();
 
-  if (!snap.exists()) {
+  if (!snap.exists) {
     console.log("Doc user belum ada");
     return;
   }
