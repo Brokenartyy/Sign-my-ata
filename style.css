@@ -1,108 +1,166 @@
+/* ================= RESET & BASE ================= */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: system-ui, sans-serif;
   background: #fff5fa;
   padding: 20px;
 }
 
+/* ================= TITLE ================= */
 h1 {
+  text-align: center;
   color: #c86491;
   font-size: 2rem;
-  margin-bottom: 1rem;
-  text-align: center;
+  margin-bottom: 16px;
 }
 
 h5 {
-  color: #c86491;
   text-align: center;
+  color: #c86491;
+  margin: 10px 0 18px;
+  font-weight: 500;
 }
 
-/* ================= EDITOR & FORM ================= */
-#editor {
+/* ================= GLOBAL WIDTH CONTROL ================= */
+/* INI PENGGARIS UTAMA */
+.form-wrapper,
+#raiden-wrapper,
+#counter,
+#sendBtn,
+#comments {
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ================= RAIDEN / GIF ================= */
+#raiden-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+#raiden-wrapper img {
+  width: 100%;
+  border-radius: 20px;
+  display: block;
+}
+
+/* ================= FORM CARD ================= */
+.form-box {
+  margin-top: 10px;
+}
+
+.form-wrapper {
   background: #ffffff;
-  border: 2px solid #ffd1dc;
-  border-radius: 12px;
-  min-height: 120px;
-  margin-bottom: 0.5rem;
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
-#counter {
-  text-align: right;
-  color: #6b6b6b;
-  margin-bottom: 0.8rem;
-}
-
-/* ================= BUTTON ================= */
-button {
-  background: #c8fbd8;
-  color: #333;
-  padding: 0.8rem 1.4rem;
-  font-size: 1rem;
-  border-radius: 10px;
-  border: none;
-  font-weight: 600;
-  transition: 0.2s ease;
-}
-
-button:hover {
-  background: #b2efca;
-  transform: translateY(-2px);
-}
-
-/* ================= NAME & GITHUB FORM ================= */
+/* ================= IDENTITY ================= */
 .identity-box {
-  background: #fffdf6;
-  border: 2px solid #ffd1dc;
-  border-radius: 18px;
-  padding: 14px 16px;
-  margin: 0 auto 18px;
-
   display: flex;
   gap: 12px;
-  justify-content: center;
-
-  max-width: 520px; 
+  margin-bottom: 16px;
 }
 
-/* input base */
 .identity-box input {
-  width: 100%;
-  height: 40px;
+  flex: 1;
+  height: 44px;
   padding: 0 14px;
-  border-radius: 14px;
+  border-radius: 16px;
   border: none;
-  font-size: 13px;
-  background: #fff;
+  font-size: 14px;
+  background: #ffffff;
+  outline: none;
 }
 
-/* proporsi sehat */
+/* NAME */
 #nameInput {
-  flex: 1.4; /* lebih dominan */
   font-weight: 600;
   box-shadow: inset 0 0 0 2px #ffd1dc;
 }
 
+/* GITHUB */
 #githubInput {
-  flex: 1;   /* normal */
-  font-size: 12px;
+  font-size: 13px;
   box-shadow: inset 0 0 0 2px #c8fbd8;
 }
 
-/* mobile */
-@media (max-width: 600px) {
-  .identity-box {
-    flex-direction: column;
-    max-width: 90%;
-  }
+/* focus */
+#nameInput:focus {
+  box-shadow:
+    inset 0 0 0 2px #c86491,
+    0 0 0 4px rgba(200,100,145,0.15);
+}
+
+#githubInput:focus {
+  box-shadow:
+    inset 0 0 0 2px #4fa3a5,
+    0 0 0 4px rgba(79,163,165,0.18);
+}
+
+/* ================= QUILL ================= */
+#toolbar {
+  border-radius: 16px 16px 0 0;
+  border: 2px solid #ffd1dc;
+  border-bottom: none;
+}
+
+#editor {
+  width: 100%;
+  min-height: 160px;
+  border-radius: 0 0 18px 18px;
+  border: 2px solid #ffd1dc;
+  padding: 12px;
+}
+
+/* ================= COUNTER ================= */
+#counter {
+  text-align: right;
+  color: #6b6b6b;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* ================= BUTTON ================= */
+#sendBtn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+
+  background: #c8fbd8;
+  color: #333;
+  padding: 12px 0;
+  font-size: 1rem;
+  border-radius: 16px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+#sendBtn:hover {
+  background: #b2efca;
+  transform: translateY(-2px);
 }
 
 /* ================= COMMENTS ================= */
+#comments {
+  margin-top: 24px;
+}
+
 .comment {
   background: #ffffff;
   border-left: 6px solid #ffd1dc;
   padding: 12px 16px;
   margin-top: 14px;
-  border-radius: 10px;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 .comment .anon {
@@ -112,45 +170,17 @@ button:hover {
   margin-bottom: 4px;
 }
 
-/* ================= LOADING / NOTICE ================= */
-#loading {
-  text-align: center;
-  padding: 16px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #c86491;
-}
-
 /* ================= RESPONSIVE ================= */
 @media (max-width: 600px) {
-  button {
-    width: 100%;
+  .identity-box {
+    flex-direction: column;
   }
-}
 
-/* ============= REPLY STYLING ========= */
-.reply {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-left: 4px solid #c8fbd8;
-  background: #f4fff8;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.reply strong {
-  color: #4fa3a5;
-}
-
-/* ============== RAIDEN WRAPPER ============== */
-#raiden-wrapper {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-#raiden-wrapper img {
-  width: 320px;
-  max-width: 90%;
-  border-radius: 16px;
+  .form-wrapper,
+  #raiden-wrapper,
+  #counter,
+  #sendBtn,
+  #comments {
+    max-width: 100%;
+  }
 }
