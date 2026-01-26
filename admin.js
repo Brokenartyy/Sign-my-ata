@@ -14,6 +14,22 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    console.log("Doc user belum ada");
+    return;
+  }
+
+  if (snap.data().role === "admin") {
+    document.body.classList.add("is-admin");
+  }
+});
+
 /* ================= SEND MAGIC LINK ================= */
 sendLinkBtn.onclick = async () => {
   const email = emailInput.value.trim();
