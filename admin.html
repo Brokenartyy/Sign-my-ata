@@ -134,6 +134,14 @@
     background: #ffb7c8;
   }
 
+  .admin-only {
+  display: none;
+}
+
+body.is-admin .admin-only {
+  display: inline-block;
+}
+
   /* ===== MOBILE ===== */
   @media (max-width: 600px) {
     body {
@@ -155,6 +163,7 @@
 <div id="adminBox" hidden>
   <h2>👑 Admin Panel</h2>
   <div id="messages"></div>
+  <button class="admin-only">Delete</button>
   <button id="logoutBtn">Logout</button>
 </div>
 
