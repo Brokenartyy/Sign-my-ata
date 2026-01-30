@@ -11,6 +11,7 @@
   }
 
   #title {
+    font-family: 'VT323', monospace;
     text-align: center;
     color: #c86491;
     margin-bottom: 20px;
@@ -29,6 +30,7 @@
   }
 
   #loginBox input {
+    font-family: 'VT323', monospace;
     padding: 14px 16px;
     border-radius: 16px;
     border: none;
@@ -44,6 +46,7 @@
   }
 
   #loginBox button {
+    font-family: 'VT323', monospace;
     background: #c8fbd8;
     border: none;
     padding: 14px;
@@ -73,12 +76,14 @@
   }
 
   .admin-card p {
+    font-family: 'VT323', monospace;
     margin: 0 0 8px;
     font-weight: 600;
     color: #444;
   }
 
   .admin-card textarea {
+    font-family: 'VT323', monospace;
     width: 100%;
     min-height: 80px;
     border-radius: 14px;
@@ -97,6 +102,7 @@
   }
 
   .admin-card button {
+    font-family: 'VT323', monospace;
     margin-top: 8px;
     background: #c8fbd8;
     border: none;
@@ -113,6 +119,7 @@
   }
 
   #logoutBtn {
+    font-family: 'VT323', monospace;
     margin: 24px auto 0;
     background: #ffd1dc;
     border: none;
