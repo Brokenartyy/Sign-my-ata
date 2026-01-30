@@ -191,11 +191,24 @@ body.is-admin .admin-only {
 
 .visitor-message p {
   margin: 4px 0 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
-textarea {
-  resize: vertical;
-  min-height: 80px;
-  overflow: hidden;
-  line-height: 1.5;
+.editor {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.admin-box,
+.message-box {
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-x: hidden;
 }
