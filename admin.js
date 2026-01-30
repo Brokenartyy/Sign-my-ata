@@ -93,6 +93,18 @@ visitorMsg.innerHTML = `
 
 box.appendChild(visitorMsg);
 
+function autoResize(el) {
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
+}
+
+const textarea = document.createElement("textarea");
+textarea.placeholder = "Balasan admin...";
+
+textarea.addEventListener("input", () => autoResize(textarea));
+
+// trigger awal (kalau ada reply lama)
+autoResize(textarea);
 
 const template = document.getElementById("editorTemplate");
 const editor = template.content.cloneNode(true);

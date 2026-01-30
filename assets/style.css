@@ -11,7 +11,7 @@
 }
 
 body {
-  font-family: 'VT323', monospace !important;
+  font-family: 'VT323', monospace;
   font-size: 20px;
   background: #fff5f8;
   color: #222;
