@@ -1,35 +1,22 @@
-const sendLinkBtn = document.getElementById("sendLinkBtn");
-const emailInput = document.getElementById("emailInput");
+import { auth, db } from "./firebase.js";
 
-/* ================= CONFIG ================= */
-const firebaseConfig = {
-  apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
-  authDomain: "pony-ata.firebaseapp.com",
-  projectId: "pony-ata"
-};
+import {
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* ================= INIT ================= */
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-auth.onAuthStateChanged(async (user) => {
-  if (!user) return;
-
-  const ref = db.collection("users").doc(user.uid);
-  const snap = await ref.get();
-
-  if (!snap.exists) {
-    console.log("Doc user belum ada");
-    return;
-  }
-
-  if (snap.data().role === "admin") {
-    document.body.classList.add("is-admin");
-  }
-});
-
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  doc,
+  updateDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ================= SEND MAGIC LINK ================= */
 sendLinkBtn.onclick = async () => {
@@ -45,7 +32,7 @@ sendLinkBtn.onclick = async () => {
   };
 
   try {
-    await auth.sendSignInLinkToEmail(email, actionCodeSettings);
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
     localStorage.setItem("adminEmail", email);
     alert("📩 Magic link terkirim! Cek inbox / spam ✨");
   } catch (err) {
@@ -54,15 +41,14 @@ sendLinkBtn.onclick = async () => {
   }
 };
 
-
 /* ================= CONFIRM MAGIC LINK ================= */
-if (auth.isSignInWithEmailLink(window.location.href)) {
+if (isSignInWithEmailLink(auth, window.location.href)) {
   const email = localStorage.getItem("adminEmail");
 
   if (!email) {
     alert("Email admin tidak ditemukan 😭");
   } else {
-    auth.signInWithEmailLink(email, window.location.href)
+    signInWithEmailLink(auth, email, window.location.href)
       .then(() => localStorage.removeItem("adminEmail"))
       .catch(err => {
         console.error(err);
@@ -72,7 +58,7 @@ if (auth.isSignInWithEmailLink(window.location.href)) {
 }
 
 /* ================= AUTH STATE ================= */
-auth.onAuthStateChanged(user => {
+onAuthStateChanged(auth, (user) => {
   if (!user) {
     loginBox.hidden = false;
     adminBox.hidden = true;
@@ -84,42 +70,44 @@ auth.onAuthStateChanged(user => {
   adminBox.hidden = false;
   title.textContent = "👑 Admin Panel";
 
-  db.collection("messages")
-    .orderBy("createdAt", "desc")
-    .onSnapshot(snap => {
-      messages.innerHTML = "";
+  const q = query(
+    collection(db, "messages"),
+    orderBy("createdAt", "desc")
+  );
 
-      snap.forEach(docSnap => {
-        const data = docSnap.data();
-        const box = document.createElement("div");
-        box.className = "admin-card";
+  onSnapshot(q, (snap) => {
+    messages.innerHTML = "";
 
-        box.innerHTML = `
-          <b>${data.name}</b>
-          <p>${data.content}</p>
-          <textarea placeholder="Balasan admin...">${data.reply?.text || ""}</textarea>
-          <button>Reply</button>
-        `;
+    snap.forEach((docSnap) => {
+      const data = docSnap.data();
+      const box = document.createElement("div");
+      box.className = "admin-card";
 
-        box.querySelector("button").onclick = async () => {
-          try {
-            await db.collection("messages").doc(docSnap.id).update({
-              reply: {
-                text: box.querySelector("textarea").value,
-                at: firebase.firestore.FieldValue.serverTimestamp()
-              }
-            });
-          } catch (err) {
-            console.error(err);
-            alert("❌ Gagal reply (cek rules / admin claim)");
-          }
-        };
+      box.innerHTML = `
+        <b>${data.name}</b>
+        <p>${data.content}</p>
+        <textarea placeholder="Balasan admin...">${data.reply?.text || ""}</textarea>
+        <button>Reply</button>
+      `;
 
-        messages.appendChild(box);
-      });
+      box.querySelector("button").onclick = async () => {
+        try {
+          await updateDoc(doc(db, "messages", docSnap.id), {
+            reply: {
+              text: box.querySelector("textarea").value,
+              at: serverTimestamp()
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          alert("❌ Gagal reply (cek rules / admin claim)");
+        }
+      };
+
+      messages.appendChild(box);
     });
+  });
 });
 
 /* ================= LOGOUT ================= */
-logoutBtn.onclick = () => auth.signOut();
-
+logoutBtn.onclick = () => signOut(auth);
