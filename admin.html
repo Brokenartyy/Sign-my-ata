@@ -29,14 +29,18 @@
 
 <template id="editorTemplate">
   <div class="editor">
-    <div class="toolbar">
-      <button data-cmd="bold"><b>B</b></button>
-      <button data-cmd="italic"><i>I</i></button>
-      <button data-cmd="underline"><u>U</u></button>
-      <button data-link>🔗</button>
-    </div>
-    <div class="editor-area" contenteditable="true" placeholder="Balasan admin..."></div>
+  <div class="toolbar">
+    <button onclick="document.execCommand('bold')">B</button>
+    <button onclick="document.execCommand('italic')">I</button>
+    <button onclick="document.execCommand('underline')">U</button>
   </div>
+
+  <div
+    class="editor-area"
+    contenteditable="true"
+    placeholder="Tulis balasan admin..."
+  ></div>
+</div>
 </template>
 
 </body>
