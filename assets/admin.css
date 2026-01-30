@@ -5,11 +5,13 @@
   }
 
   body {
-    font-family: 'VT323', monospace;
+    font-family: 'VT323', monospace !important;
+    font-size: 20px;
     background: #fff5fa;
     padding: 24px;
     max-width: 900px;
     margin: auto;
+    letter-spacing: 1px;
   }
 
   #title {
