@@ -6,14 +6,16 @@
   box-sizing: border-box;
   font-family: 'VT323', monospace;
   box-sizing: border-box;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: 'VT323', monospace;
+  font-family: 'VT323', monospace !important;
   font-size: 20px;
   background: #fff5f8;
   color: #222;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   padding: 20px;
 }
 
