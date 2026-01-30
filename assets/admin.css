@@ -192,3 +192,10 @@ body.is-admin .admin-only {
 .visitor-message p {
   margin: 4px 0 0;
 }
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  overflow: hidden;
+  line-height: 1.5;
+}
