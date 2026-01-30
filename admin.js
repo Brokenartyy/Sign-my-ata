@@ -83,26 +83,44 @@ onAuthStateChanged(auth, (user) => {
       const box = document.createElement("div");
       box.className = "admin-card";
 
-      box.innerHTML = `
-        <b>${data.name}</b>
-        <p>${data.content}</p>
-        <textarea placeholder="Balasan admin...">${data.reply?.text || ""}</textarea>
-        <button>Reply</button>
-      `;
+const template = document.getElementById("editorTemplate");
+const editor = template.content.cloneNode(true);
 
-      box.querySelector("button").onclick = async () => {
-        try {
-          await updateDoc(doc(db, "messages", docSnap.id), {
-            reply: {
-              text: box.querySelector("textarea").value,
-              at: serverTimestamp()
-            }
-          });
-        } catch (err) {
-          console.error(err);
-          alert("❌ Gagal reply (cek rules / admin claim)");
-        }
-      };
+const editorArea = editor.querySelector(".editor-area");
+editorArea.innerHTML = data.reply?.text || "";
+
+editor.querySelectorAll("[data-cmd]").forEach(btn => {
+  btn.onclick = () => {
+    document.execCommand(btn.dataset.cmd, false, null);
+  };
+});
+
+editor.querySelector("[data-link]").onclick = () => {
+  const url = prompt("Masukkan URL:");
+  if (url) document.execCommand("createLink", false, url);
+};
+
+box.appendChild(editor);
+
+const replyBtn = document.createElement("button");
+replyBtn.textContent = "Reply";
+
+replyBtn.onclick = async () => {
+  try {
+    await updateDoc(doc(db, "messages", docSnap.id), {
+      reply: {
+        text: editorArea.innerHTML,
+        at: serverTimestamp()
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    alert("❌ Gagal reply");
+  }
+};
+
+box.appendChild(replyBtn);
+
 
       messages.appendChild(box);
     });

@@ -141,3 +141,26 @@ body.is-admin .admin-only {
       padding: 16px;
     }
   }
+
+.editor {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.toolbar {
+  background: #f3f3f3;
+  padding: 6px;
+}
+
+.toolbar button {
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.editor-area {
+  padding: 8px;
+  min-height: 80px;
+  outline: none;
+}

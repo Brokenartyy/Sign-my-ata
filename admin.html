@@ -27,5 +27,17 @@
 <script type="module" src="firebase.js"></script>
 <script type="module" src="admin.js"></script>
 
+<template id="editorTemplate">
+  <div class="editor">
+    <div class="toolbar">
+      <button data-cmd="bold"><b>B</b></button>
+      <button data-cmd="italic"><i>I</i></button>
+      <button data-cmd="underline"><u>U</u></button>
+      <button data-link>🔗</button>
+    </div>
+    <div class="editor-area" contenteditable="true" placeholder="Balasan admin..."></div>
+  </div>
+</template>
+
 </body>
 </html>
