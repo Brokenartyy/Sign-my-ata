@@ -3,7 +3,7 @@
   }
 
   body {
-    font-family: system-ui, sans-serif;
+    font-family: 'VT323', monospace;
     background: #fff5fa;
     padding: 24px;
     max-width: 900px;
@@ -163,4 +163,16 @@ body.is-admin .admin-only {
   padding: 8px;
   min-height: 80px;
   outline: none;
+}
+
+.visitor-message {
+  background: #f9f9f9;
+  border-left: 4px solid #ffd6e7;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.visitor-message p {
+  margin: 4px 0 0;
 }

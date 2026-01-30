@@ -83,6 +83,17 @@ onAuthStateChanged(auth, (user) => {
       const box = document.createElement("div");
       box.className = "admin-card";
 
+const visitorMsg = document.createElement("div");
+visitorMsg.className = "visitor-message";
+
+visitorMsg.innerHTML = `
+  <b>${data.name}</b>
+  <p>${data.content}</p>
+`;
+
+box.appendChild(visitorMsg);
+
+
 const template = document.getElementById("editorTemplate");
 const editor = template.content.cloneNode(true);
 
