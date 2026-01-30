@@ -9,9 +9,9 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase
 
 /* ================= CONFIG ================= */
 export const firebaseConfig = {
-  apiKey: "API_KEY_KAMU",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  projectId: "PROJECT_ID"
+  apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
+  authDomain: "pony-ata.firebaseapp.com",
+  projectId: "pony-ata"
 };
 
 /* ================= INIT APP ================= */
