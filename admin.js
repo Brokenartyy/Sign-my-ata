@@ -108,6 +108,36 @@ onAuthStateChanged(auth, (user) => {
       editorArea.innerHTML = data.reply?.text || "";
       editorArea.innerHTML ||= "<p><br></p>";
 
+      /* ===== ADMIN REPLY CHAR COUNTER ===== */
+const ADMIN_REPLY_LIMIT = 300;
+
+const counter = document.createElement("div");
+counter.textContent = "0/" + ADMIN_REPLY_LIMIT;
+counter.style.fontSize = "12px";
+counter.style.opacity = "0.7";
+counter.style.marginTop = "4px";
+
+function updateCounter() {
+  const length = editorArea.innerText.length;
+  counter.textContent = `${length}/${ADMIN_REPLY_LIMIT}`;
+
+  if (length > ADMIN_REPLY_LIMIT) {
+    counter.style.color = "red";
+  } else {
+    counter.style.color = "";
+  }
+}
+
+editorArea.addEventListener("input", () => {
+  if (editorArea.innerText.length > ADMIN_REPLY_LIMIT) {
+    editorArea.innerText = editorArea.innerText.slice(0, ADMIN_REPLY_LIMIT);
+  }
+  updateCounter();
+});
+
+editorArea.after(counter);
+updateCounter();
+
   editor.querySelectorAll("[data-cmd]").forEach((btn) => {
   btn.onclick = () => {
     editorArea.focus();
@@ -131,38 +161,6 @@ onAuthStateChanged(auth, (user) => {
       }
 
       box.appendChild(editor);
-
-/* ===== ADMIN REPLY CHAR LIMIT ===== */
-const ADMIN_REPLY_LIMIT = 300;
-
-const adminReplyInput = document.getElementById("adminReply");
-const sendReplyBtn = document.getElementById("sendReplyBtn");
-
-// bikin counter kecil (opsional tapi cakep)
-const counter = document.createElement("div");
-counter.style.fontSize = "12px";
-counter.style.opacity = "0.7";
-counter.style.marginTop = "4px";
-adminReplyInput.after(counter);
-
-function updateCounter() {
-  const length = adminReplyInput.value.length;
-  counter.textContent = `${length}/${ADMIN_REPLY_LIMIT}`;
-
-  // disable tombol kalau lewat limit
-  sendReplyBtn.disabled = length === 0 || length > ADMIN_REPLY_LIMIT;
-}
-
-adminReplyInput.addEventListener("input", () => {
-  if (adminReplyInput.value.length > ADMIN_REPLY_LIMIT) {
-    adminReplyInput.value = adminReplyInput.value.slice(0, ADMIN_REPLY_LIMIT);
-  }
-  updateCounter();
-});
-
-// init pas load
-updateCounter();
-
 
       /* ===== REPLY BUTTON ===== */
       const replyBtn = document.createElement("button");
