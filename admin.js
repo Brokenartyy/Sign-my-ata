@@ -108,6 +108,70 @@ onAuthStateChanged(auth, (user) => {
       editorArea.innerHTML = data.reply?.text || "";
       editorArea.innerHTML ||= "<p><br></p>";
 
+      /* ===== SIMPAN POSISI KURSOR ===== */
+let savedRange = null;
+
+function saveSelection(editorArea) {
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  const range = sel.getRangeAt(0);
+
+  if (editorArea.contains(range.startContainer)) {
+    savedRange = range;
+  }
+}
+
+editorArea.addEventListener("keyup", () => saveSelection(editorArea));
+editorArea.addEventListener("mouseup", () => saveSelection(editorArea));
+editorArea.addEventListener("focus", () => saveSelection(editorArea));
+
+    /* ===== INISIASI EMOJI PICKER ===== */
+ const picker = new EmojiButton({
+  position: 'top-start',
+  autoHide: true,
+  showSearch: true,
+  showPreview: false,
+  theme: 'auto'
+});
+  
+const emojiBtn = editor.querySelector(".emoji-btn");
+
+emojiBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  editorArea.focus();
+
+  if (savedRange) {
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+
+  picker.togglePicker(emojiBtn);
+});
+
+picker.on('emoji', emoji => {
+  insertEmojiToEditor(emoji.emoji);
+});
+
+function insertEmojiToEditor(emojiChar) {
+  if (!savedRange) return;
+
+  const range = savedRange;
+  range.deleteContents();
+
+  const textNode = document.createTextNode(emojiChar);
+  range.insertNode(textNode);
+
+  range.setStartAfter(textNode);
+  range.collapse(true);
+
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+
+  savedRange = range;
+}
+
       /* ===== ADMIN REPLY CHAR COUNTER ===== */
 const ADMIN_REPLY_LIMIT = 300;
 
@@ -191,6 +255,7 @@ updateCounter();
   });
 });
 
+twemoji.parse(editorArea, { folder: 'svg', ext: '.svg' });
 
 /* ================= LOGOUT ================= */
 logoutBtn.onclick = () => signOut(auth);
