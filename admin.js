@@ -28,6 +28,19 @@ const messages    = document.getElementById("messages");
 const title       = document.getElementById("title");
 const logoutBtn   = document.getElementById("logoutBtn");
 
+/* ===============================
+   ADMIN EMOJI PICKER STATE
+================================ */
+let activeEditorArea = null;
+let savedRange = null;
+
+const picker = new EmojiButton({
+  showSearch: true,
+  showPreview: false,
+  autoHide: true,
+  theme: 'auto'
+});
+
 /* ================= SEND MAGIC LINK ================= */
 sendLinkBtn.onclick = async () => {
   const email = emailInput.value.trim();
@@ -108,32 +121,23 @@ onAuthStateChanged(auth, (user) => {
       editorArea.innerHTML = data.reply?.text || "";
       editorArea.innerHTML ||= "<p><br></p>";
 
-      /* ===== SIMPAN POSISI KURSOR ===== */
-let savedRange = null;
+      editorArea.addEventListener("focus", () => {
+  activeEditorArea = editorArea;
+});
 
-function saveSelection(editorArea) {
+editorArea.addEventListener("keyup", saveSelection);
+editorArea.addEventListener("mouseup", saveSelection);
+
+function saveSelection() {
   const sel = window.getSelection();
-  if (!sel.rangeCount) return;
-  const range = sel.getRangeAt(0);
+  if (!sel.rangeCount || !activeEditorArea) return;
 
-  if (editorArea.contains(range.startContainer)) {
+  const range = sel.getRangeAt(0);
+  if (activeEditorArea.contains(range.startContainer)) {
     savedRange = range;
   }
 }
 
-editorArea.addEventListener("keyup", () => saveSelection(editorArea));
-editorArea.addEventListener("mouseup", () => saveSelection(editorArea));
-editorArea.addEventListener("focus", () => saveSelection(editorArea));
-
-    /* ===== INISIASI EMOJI PICKER ===== */
- const picker = new EmojiButton({
-  position: 'top-start',
-  autoHide: true,
-  showSearch: true,
-  showPreview: false,
-  theme: 'auto'
-});
-  
 const emojiBtn = editor.querySelector(".emoji-btn");
 
 emojiBtn.addEventListener("click", (e) => {
@@ -149,12 +153,12 @@ emojiBtn.addEventListener("click", (e) => {
   picker.togglePicker(emojiBtn);
 });
 
-picker.on('emoji', emoji => {
-  insertEmojiToEditor(emoji.emoji);
+picker.on("emoji", emoji => {
+  insertEmoji(emoji.emoji);
 });
 
-function insertEmojiToEditor(emojiChar) {
-  if (!savedRange) return;
+function insertEmoji(emojiChar) {
+  if (!savedRange || !activeEditorArea) return;
 
   const range = savedRange;
   range.deleteContents();
@@ -171,7 +175,6 @@ function insertEmojiToEditor(emojiChar) {
 
   savedRange = range;
 }
-
       /* ===== ADMIN REPLY CHAR COUNTER ===== */
 const ADMIN_REPLY_LIMIT = 300;
 
@@ -254,8 +257,6 @@ updateCounter();
     });
   });
 });
-
-twemoji.parse(editorArea, { folder: 'svg', ext: '.svg' });
 
 /* ================= LOGOUT ================= */
 logoutBtn.onclick = () => signOut(auth);
