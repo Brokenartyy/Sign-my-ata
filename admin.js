@@ -156,5 +156,36 @@ onAuthStateChanged(auth, (user) => {
   });
 });
 
+/* ===== ADMIN REPLY CHAR LIMIT ===== */
+const ADMIN_REPLY_LIMIT = 300;
+
+const adminReplyInput = document.getElementById("adminReply");
+const sendReplyBtn = document.getElementById("sendReplyBtn");
+
+// bikin counter kecil (opsional tapi cakep)
+const counter = document.createElement("div");
+counter.style.fontSize = "12px";
+counter.style.opacity = "0.7";
+counter.style.marginTop = "4px";
+adminReplyInput.after(counter);
+
+function updateCounter() {
+  const length = adminReplyInput.value.length;
+  counter.textContent = `${length}/${ADMIN_REPLY_LIMIT}`;
+
+  // disable tombol kalau lewat limit
+  sendReplyBtn.disabled = length === 0 || length > ADMIN_REPLY_LIMIT;
+}
+
+adminReplyInput.addEventListener("input", () => {
+  if (adminReplyInput.value.length > ADMIN_REPLY_LIMIT) {
+    adminReplyInput.value = adminReplyInput.value.slice(0, ADMIN_REPLY_LIMIT);
+  }
+  updateCounter();
+});
+
+// init pas load
+updateCounter();
+
 /* ================= LOGOUT ================= */
 logoutBtn.onclick = () => signOut(auth);

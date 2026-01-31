@@ -48,7 +48,7 @@
     counter.textContent = `${length} karakter`;
   });
 
-  const MAX_CHAR = 10000;
+  const MAX_CHAR = 300;
 
 window.quill.on("text-change", () => {
   const length = window.quill.getLength();
