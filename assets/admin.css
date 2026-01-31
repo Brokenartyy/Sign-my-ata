@@ -74,6 +74,7 @@ body {
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  overflow: visible;
 }
 
 /* ===== VISITOR MESSAGE ===== */
@@ -169,4 +170,12 @@ body.is-admin .admin-only {
   body {
     padding: 16px;
   }
+}
+
+.editor-footer {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 4px;
 }
