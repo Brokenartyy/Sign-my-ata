@@ -108,14 +108,16 @@ onAuthStateChanged(auth, (user) => {
       editorArea.innerHTML = data.reply?.text || "";
       editorArea.innerHTML ||= "<p><br></p>";
 
-   btn.onclick = () => {
-  editorArea.focus();
+  editor.querySelectorAll("[data-cmd]").forEach((btn) => {
+  btn.onclick = () => {
+    editorArea.focus();
 
-  const sel = window.getSelection();
-  if (!sel.rangeCount) return;
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
 
-  document.execCommand(btn.dataset.cmd);
-};
+    document.execCommand(btn.dataset.cmd);
+  };
+});
 
       const linkBtn = editor.querySelector("[data-link]");
       if (linkBtn) {
@@ -129,35 +131,6 @@ onAuthStateChanged(auth, (user) => {
       }
 
       box.appendChild(editor);
-
-      /* ===== REPLY BUTTON ===== */
-      const replyBtn = document.createElement("button");
-      replyBtn.textContent = "Reply";
-
-      replyBtn.onclick = async () => {
-        if (!editorArea.innerText.trim()) {
-          alert("Balasan masih kosong 🗿");
-          return;
-        }
-
-        try {
-          await updateDoc(doc(db, "messages", docSnap.id), {
-            reply: {
-              text: editorArea.innerHTML,
-              at: serverTimestamp()
-            }
-          });
-        } catch (err) {
-          console.error(err);
-          alert("❌ Gagal reply");
-        }
-      };
-
-      box.appendChild(replyBtn);
-      messages.appendChild(box);
-    });
-  });
-});
 
 /* ===== ADMIN REPLY CHAR LIMIT ===== */
 const ADMIN_REPLY_LIMIT = 300;
@@ -189,6 +162,37 @@ adminReplyInput.addEventListener("input", () => {
 
 // init pas load
 updateCounter();
+
+
+      /* ===== REPLY BUTTON ===== */
+      const replyBtn = document.createElement("button");
+      replyBtn.textContent = "Reply";
+
+      replyBtn.onclick = async () => {
+        if (!editorArea.innerText.trim()) {
+          alert("Balasan masih kosong 🗿");
+          return;
+        }
+
+        try {
+          await updateDoc(doc(db, "messages", docSnap.id), {
+            reply: {
+              text: editorArea.innerHTML,
+              at: serverTimestamp()
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          alert("❌ Gagal reply");
+        }
+      };
+
+      box.appendChild(replyBtn);
+      messages.appendChild(box);
+    });
+  });
+});
+
 
 /* ================= LOGOUT ================= */
 logoutBtn.onclick = () => signOut(auth);
