@@ -1,3 +1,16 @@
+/* ===============================
+   PICMO ADMIN STATE
+================================ */
+let activeEditorArea = null;
+let savedRange = null;
+
+const picker = new PicmoPopupPicker.PopupPicker({
+  showSearch: true,
+  showPreview: false,
+  autoHide: true,
+  emojiSize: '20px'
+});
+
 /* ================= IMPORT ================= */
 import { auth, db } from "./firebase.js";
 
@@ -27,19 +40,6 @@ const adminBox    = document.getElementById("adminBox");
 const messages    = document.getElementById("messages");
 const title       = document.getElementById("title");
 const logoutBtn   = document.getElementById("logoutBtn");
-
-/* ===============================
-   ADMIN EMOJI PICKER STATE
-================================ */
-let activeEditorArea = null;
-let savedRange = null;
-
-const picker = new EmojiButton({
-  showSearch: true,
-  showPreview: false,
-  autoHide: true,
-  theme: 'auto'
-});
 
 /* ================= SEND MAGIC LINK ================= */
 sendLinkBtn.onclick = async () => {
@@ -150,11 +150,11 @@ emojiBtn.addEventListener("click", (e) => {
     sel.addRange(savedRange);
   }
 
-  picker.togglePicker(emojiBtn);
+  picker.toggle(emojiBtn);
 });
 
-picker.on("emoji", emoji => {
-  insertEmoji(emoji.emoji);
+picker.addEventListener('emoji:select', event => {
+  insertEmoji(event.emoji);
 });
 
 function insertEmoji(emojiChar) {
@@ -175,6 +175,7 @@ function insertEmoji(emojiChar) {
 
   savedRange = range;
 }
+
       /* ===== ADMIN REPLY CHAR COUNTER ===== */
 const ADMIN_REPLY_LIMIT = 300;
 
