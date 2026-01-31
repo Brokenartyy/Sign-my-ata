@@ -106,13 +106,16 @@ onAuthStateChanged(auth, (user) => {
 
       editorArea.setAttribute("contenteditable", "true");
       editorArea.innerHTML = data.reply?.text || "";
+      editorArea.innerHTML ||= "<p><br></p>";
 
-      editor.querySelectorAll("[data-cmd]").forEach((btn) => {
-        btn.onclick = () => {
-          editorArea.focus();
-          document.execCommand(btn.dataset.cmd, false, null);
-        };
-      });
+   btn.onclick = () => {
+  editorArea.focus();
+
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+
+  document.execCommand(btn.dataset.cmd);
+};
 
       const linkBtn = editor.querySelector("[data-link]");
       if (linkBtn) {
