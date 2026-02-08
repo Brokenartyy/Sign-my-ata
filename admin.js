@@ -4,11 +4,14 @@
 let activeEditorArea = null;
 let savedRange = null;
 
-const picker = new PicmoPopupPicker.PopupPicker({
+const picker = new window.PicmoPopupPicker.PopupPicker({
   showSearch: true,
   showPreview: false,
-  autoHide: true,
-  emojiSize: '20px'
+  autoHide: true
+});
+
+picker.addEventListener("emoji:select", e => {
+  insertEmoji(e.emoji);
 });
 
 /* ================= IMPORT ================= */
@@ -153,10 +156,6 @@ emojiBtn.addEventListener("click", (e) => {
   picker.toggle(emojiBtn);
 });
 
-picker.addEventListener('emoji:select', event => {
-  insertEmoji(event.emoji);
-});
-
 function insertEmoji(emojiChar) {
   if (!savedRange || !activeEditorArea) return;
 
@@ -177,45 +176,23 @@ function insertEmoji(emojiChar) {
 }
 
       /* ===== ADMIN REPLY CHAR COUNTER ===== */
-const ADMIN_REPLY_LIMIT = 300;
-
-const counter = document.createElement("div");
-counter.textContent = "0/" + ADMIN_REPLY_LIMIT;
-counter.style.fontSize = "12px";
-counter.style.opacity = "0.7";
-counter.style.marginTop = "4px";
-
-function updateCounter() {
-  const length = editorArea.innerText.length;
-  counter.textContent = `${length}/${ADMIN_REPLY_LIMIT}`;
-
-  if (length > ADMIN_REPLY_LIMIT) {
-    counter.style.color = "red";
-  } else {
-    counter.style.color = "";
-  }
+function getPlainTextLength(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.innerText.length;
 }
 
 editorArea.addEventListener("input", () => {
-  if (editorArea.innerText.length > ADMIN_REPLY_LIMIT) {
-    editorArea.innerText = editorArea.innerText.slice(0, ADMIN_REPLY_LIMIT);
+  const length = getPlainTextLength(editorArea.innerHTML);
+
+  if (length > ADMIN_REPLY_LIMIT) {
+    editorArea.innerHTML = editorArea.innerHTML.slice(0, ADMIN_REPLY_LIMIT);
   }
-  updateCounter();
+
+  counter.textContent = `${length}/${ADMIN_REPLY_LIMIT}`;
+  counter.style.color = length > ADMIN_REPLY_LIMIT ? "red" : "";
 });
 
-editorArea.after(counter);
-updateCounter();
-
-  editor.querySelectorAll("[data-cmd]").forEach((btn) => {
-  btn.onclick = () => {
-    editorArea.focus();
-
-    const sel = window.getSelection();
-    if (!sel.rangeCount) return;
-
-    document.execCommand(btn.dataset.cmd);
-  };
-});
 
       const linkBtn = editor.querySelector("[data-link]");
       if (linkBtn) {
