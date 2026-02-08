@@ -12,27 +12,6 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-
-import {
-  getAuth,
-  onAuthStateChanged,
-  signOut,
-  sendSignInLinkToEmail
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-  getFirestore,
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const auth = getAuth();
-const db = getFirestore();
-
 const loginBox = document.getElementById("loginBox");
 const adminBox = document.getElementById("adminBox");
 const messagesDiv = document.getElementById("messages");
