@@ -1,240 +1,130 @@
-/* ===============================
-   PICMO ADMIN STATE
-================================ */
-let activeEditorArea = null;
-let savedRange = null;
-
-const picker = new window.PicmoPopupPicker.PopupPicker({
-  showSearch: true,
-  showPreview: false,
-  autoHide: true
-});
-
-picker.addEventListener("emoji:select", e => {
-  insertEmoji(e.emoji);
-});
-
-/* ================= IMPORT ================= */
-import { auth, db } from "./firebase.js";
-
 import {
-  sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
+  getAuth,
   onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  signOut,
+  sendSignInLinkToEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
+  getFirestore,
   collection,
   query,
   orderBy,
   onSnapshot,
-  doc,
-  updateDoc,
+  addDoc,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ================= ELEMENT ================= */
+const auth = getAuth();
+const db = getFirestore();
+
+const loginBox = document.getElementById("loginBox");
+const adminBox = document.getElementById("adminBox");
+const messagesDiv = document.getElementById("messages");
+
+const emailInput = document.getElementById("emailInput");
 const sendLinkBtn = document.getElementById("sendLinkBtn");
-const emailInput  = document.getElementById("emailInput");
-const loginBox    = document.getElementById("loginBox");
-const adminBox    = document.getElementById("adminBox");
-const messages    = document.getElementById("messages");
-const title       = document.getElementById("title");
-const logoutBtn   = document.getElementById("logoutBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-/* ================= SEND MAGIC LINK ================= */
+/* ================= LOGIN ================= */
+
 sendLinkBtn.onclick = async () => {
-  const email = emailInput.value.trim();
-  if (!email) {
-    alert("Email kosong 🗿");
-    return;
-  }
+  const email = emailInput.value;
+  if (!email) return alert("Email kosong");
 
-  const actionCodeSettings = {
-    url: "https://brokenartyy.github.io/Sign-my-ata/admin.html",
+  await sendSignInLinkToEmail(auth, email, {
+    url: window.location.href,
     handleCodeInApp: true
-  };
+  });
 
-  try {
-    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-    localStorage.setItem("adminEmail", email);
-    alert("📩 Magic link terkirim! Cek inbox / spam ✨");
-  } catch (err) {
-    console.error(err);
-    alert("❌ Gagal kirim magic link");
-  }
+  alert("Magic link dikirim 💌");
 };
 
-/* ================= CONFIRM MAGIC LINK ================= */
-if (isSignInWithEmailLink(auth, window.location.href)) {
-  const email = localStorage.getItem("adminEmail");
+logoutBtn.onclick = () => signOut(auth);
 
-  if (email) {
-    signInWithEmailLink(auth, email, window.location.href)
-      .then(() => localStorage.removeItem("adminEmail"))
-      .catch(() => alert("❌ Magic link invalid / expired"));
-  }
-}
-
-/* ================= AUTH STATE ================= */
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
+onAuthStateChanged(auth, user => {
+  if (user) {
+    loginBox.hidden = true;
+    adminBox.hidden = false;
+    loadMessages();
+  } else {
     loginBox.hidden = false;
     adminBox.hidden = true;
-    title.textContent = "🔒 Admin Login";
-    return;
   }
+});
 
-  loginBox.hidden = true;
-  adminBox.hidden = false;
-  title.textContent = "👑 Admin Panel";
+/* ================= EMOJI PICKER ================= */
 
+const picker = new window.PicmoPopupPicker.PopupPicker({
+  autoHide: true
+});
+
+let activeEditor = null;
+
+picker.addEventListener("emoji:select", e => {
+  if (!activeEditor) return;
+  document.execCommand("insertText", false, e.emoji);
+});
+
+/* ================= LOAD MESSAGES ================= */
+
+function loadMessages() {
   const q = query(
     collection(db, "messages"),
-    orderBy("createdAt", "desc")
+    orderBy("createdAt", "asc")
   );
 
-  onSnapshot(q, (snap) => {
-    messages.innerHTML = "";
+  onSnapshot(q, snap => {
+    messagesDiv.innerHTML = "";
 
-    snap.forEach((docSnap) => {
-      const data = docSnap.data();
+    snap.forEach(doc => {
+      const data = doc.data();
 
-      /* ===== CARD ===== */
-      const box = document.createElement("div");
-      box.className = "admin-card";
+      const msgBox = document.createElement("div");
+      msgBox.className = "message";
 
-      /* ===== VISITOR MESSAGE ===== */
-      const visitorMsg = document.createElement("div");
-      visitorMsg.className = "visitor-message";
-      visitorMsg.innerHTML = `
-        <b>${data.name}</b>
-        <p>${data.content}</p>
+      msgBox.innerHTML = `
+        <p><b>User:</b> ${data.text}</p>
       `;
-      box.appendChild(visitorMsg);
 
-      /* ===== EDITOR ===== */
+      // ===== CLONE EDITOR =====
       const template = document.getElementById("editorTemplate");
-      const editor = template.content.cloneNode(true);
-      const editorArea = editor.querySelector(".editor-area");
+      const editorClone = template.content.cloneNode(true);
 
-      editorArea.setAttribute("contenteditable", "true");
-      editorArea.innerHTML = data.reply?.text || "";
-      editorArea.innerHTML ||= "<p><br></p>";
+      const editor = editorClone.querySelector(".editor");
+      const editorArea = editorClone.querySelector(".editor-area");
+      const emojiBtn = editorClone.querySelector(".emoji-btn");
+      const sendBtn = editorClone.querySelector(".send-reply");
 
-      editorArea.addEventListener("focus", () => {
-  activeEditorArea = editorArea;
-});
-
-editorArea.addEventListener("keyup", saveSelection);
-editorArea.addEventListener("mouseup", saveSelection);
-
-function saveSelection() {
-  const sel = window.getSelection();
-  if (!sel.rangeCount || !activeEditorArea) return;
-
-  const range = sel.getRangeAt(0);
-  if (activeEditorArea.contains(range.startContainer)) {
-    savedRange = range;
-  }
-}
-
-const emojiBtn = editor.querySelector(".emoji-btn");
-
-emojiBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  editorArea.focus();
-
-  if (savedRange) {
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-  }
-
-  picker.toggle(emojiBtn);
-});
-
-function insertEmoji(emojiChar) {
-  if (!savedRange || !activeEditorArea) return;
-
-  const range = savedRange;
-  range.deleteContents();
-
-  const textNode = document.createTextNode(emojiChar);
-  range.insertNode(textNode);
-
-  range.setStartAfter(textNode);
-  range.collapse(true);
-
-  const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
-
-  savedRange = range;
-}
-
-      /* ===== ADMIN REPLY CHAR COUNTER ===== */
-function getPlainTextLength(html) {
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  return div.innerText.length;
-}
-
-editorArea.addEventListener("input", () => {
-  const length = getPlainTextLength(editorArea.innerHTML);
-
-  if (length > ADMIN_REPLY_LIMIT) {
-    editorArea.innerHTML = editorArea.innerHTML.slice(0, ADMIN_REPLY_LIMIT);
-  }
-
-  counter.textContent = `${length}/${ADMIN_REPLY_LIMIT}`;
-  counter.style.color = length > ADMIN_REPLY_LIMIT ? "red" : "";
-});
-
-
-      const linkBtn = editor.querySelector("[data-link]");
-      if (linkBtn) {
-        linkBtn.onclick = () => {
-          const url = prompt("Masukkan URL:");
-          if (url) {
-            editorArea.focus();
-            document.execCommand("createLink", false, url);
-          }
+      // toolbar formatting
+      editorClone.querySelectorAll("[data-cmd]").forEach(btn => {
+        btn.onclick = () => {
+          document.execCommand(btn.dataset.cmd, false, null);
         };
-      }
+      });
 
-      box.appendChild(editor);
-
-      /* ===== REPLY BUTTON ===== */
-      const replyBtn = document.createElement("button");
-      replyBtn.textContent = "Reply";
-
-      replyBtn.onclick = async () => {
-        if (!editorArea.innerText.trim()) {
-          alert("Balasan masih kosong 🗿");
-          return;
-        }
-
-        try {
-          await updateDoc(doc(db, "messages", docSnap.id), {
-            reply: {
-              text: editorArea.innerHTML,
-              at: serverTimestamp()
-            }
-          });
-        } catch (err) {
-          console.error(err);
-          alert("❌ Gagal reply");
-        }
+      emojiBtn.onclick = e => {
+        activeEditor = editorArea;
+        picker.toggle(e.target);
       };
 
-      box.appendChild(replyBtn);
-      messages.appendChild(box);
+      sendBtn.onclick = async () => {
+        if (!editorArea.innerHTML.trim()) return;
+
+        await addDoc(
+          collection(db, "messages", doc.id, "replies"),
+          {
+            text: editorArea.innerHTML,
+            createdAt: serverTimestamp(),
+            admin: true
+          }
+        );
+
+        editorArea.innerHTML = "";
+      };
+
+      msgBox.appendChild(editorClone);
+      messagesDiv.appendChild(msgBox);
     });
   });
-});
-
-/* ================= LOGOUT ================= */
-logoutBtn.onclick = () => signOut(auth);
+}

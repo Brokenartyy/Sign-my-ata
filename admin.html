@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <title>Admin Panel</title>
 
-<link rel="stylesheet" href="assets/admin.css">
-<!-- PICMO POPUP PICKER (UMD) -->
-<script src="https://cdn.jsdelivr.net/npm/@picmo/popup-picker@5/dist/index.umd.js"></script>
+  <link rel="stylesheet" href="assets/admin.css">
 
+  <!-- PICMO POPUP PICKER -->
+  <script src="https://cdn.jsdelivr.net/npm/@picmo/popup-picker@5/dist/index.umd.js"></script>
 </head>
 <body>
 
@@ -21,29 +21,31 @@
 <div id="adminBox" hidden>
   <h2>Admin Panel</h2>
   <div id="messages"></div>
-  <button class="admin-only">Delete</button>
   <button id="logoutBtn">Logout</button>
 </div>
 
-   <!-- ================= FIREBASE CDN (MODULAR) ================= -->
+<!-- FIREBASE -->
 <script type="module" src="firebase.js"></script>
 <script type="module" src="admin.js"></script>
 
+<!-- TEMPLATE EDITOR -->
 <template id="editorTemplate">
   <div class="editor">
-  <div class="toolbar">
-    <button data-cmd="bold">B</button>
-    <button data-cmd="italic">I</button>
-    <button data-cmd="underline">U</button>
-    <button class="emoji-btn">😀</button>
-  </div>
+    <div class="toolbar">
+      <button data-cmd="bold"><b>B</b></button>
+      <button data-cmd="italic"><i>I</i></button>
+      <button data-cmd="underline"><u>U</u></button>
+      <button class="emoji-btn">😀</button>
+    </div>
 
-  <div
-    class="editor-area"
-    contenteditable="true"
-    placeholder="Tulis balasan admin..."
-  ></div>
-</div>
+    <div
+      class="editor-area"
+      contenteditable="true"
+      placeholder="Tulis balasan admin..."
+    ></div>
+
+    <button class="send-reply">Kirim Balasan</button>
+  </div>
 </template>
 
 </body>
