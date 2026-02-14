@@ -178,27 +178,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
  function setupEditor(wrapper, docId, data) {
 
-  const editorArea = wrapper.querySelector(".editor-area");
+  const editorContainer = wrapper.querySelector(".editor-area");
   const sendBtn = wrapper.querySelector(".send-reply");
 
-  // 🔥 MASUKKAN DI SINI
+  const quill = new Quill(editorContainer, {
+    theme: "snow",
+    placeholder: "Tulis balasan...",
+    modules: {
+      toolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "bullet" }],
+        ["clean"]
+      ]
+    }
+  });
+
+  // preload reply lama
   if (data.reply) {
-    editorArea.innerHTML = data.reply.text;
+    quill.root.innerHTML = data.reply.text;
   }
 
   sendBtn.addEventListener("click", async () => {
-
-    const replyText = editorArea.innerHTML.trim();
-    if (!replyText) return;
+    const replyHTML = quill.root.innerHTML.trim();
+    if (!replyHTML || replyHTML === "<p><br></p>") return;
 
     await updateDoc(doc(db, "messages", docId), {
       reply: {
-        text: replyText
+        text: replyHTML
       }
     });
 
   });
-
 }
 
 });
