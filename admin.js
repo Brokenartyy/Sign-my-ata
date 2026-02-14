@@ -139,19 +139,29 @@ document.addEventListener("DOMContentLoaded", () => {
     userMsg.className = "user-text";
 
     userMsg.innerHTML = `
-      <strong>${data.name || "Anon"}</strong>
-      ${data.github ? `<a href="${data.github}" target="_blank">GitHub</a>` : ""}
-      ${data.content}
-      ${
-        data.reply
-          ? `<div class="reply">
-               <strong>Nanaa</strong>
-               ${data.reply.text}
-             </div>`
-          : ""
-      }
-      <small>${data.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
-    `;
+  <div class="comment-header">
+    <span class="comment-name">${data.name || "Anon"}</span>
+    ${data.github ? `<a class="github" href="${data.github}" target="_blank">GitHub</a>` : ""}
+  </div>
+
+  <div class="comment-body">
+    ${data.content}
+  </div>
+
+  ${
+    data.reply
+      ? `<div class="reply">
+           <div class="reply-header">Nanaa</div>
+           <div class="reply-body">${data.reply.text}</div>
+         </div>`
+      : ""
+  }
+
+  <div class="comment-time">
+    ${data.createdAt?.toDate()?.toLocaleString() || "baru saja"}
+  </div>
+`;
+
 
     wrapper.appendChild(userMsg);
 
@@ -160,31 +170,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     messagesDiv.appendChild(wrapper);
 
-    setupEditor(wrapper, docId);
+    setupEditor(wrapper, docId, data);
   }
 
 
   // ================= REPLY SYSTEM =================
 
-  function setupEditor(wrapper, docId) {
+ function setupEditor(wrapper, docId, data) {
 
-    const editorArea = wrapper.querySelector(".editor-area");
-    const sendBtn = wrapper.querySelector(".send-reply");
+  const editorArea = wrapper.querySelector(".editor-area");
+  const sendBtn = wrapper.querySelector(".send-reply");
 
-    sendBtn.addEventListener("click", async () => {
+  // 🔥 MASUKKAN DI SINI
+  if (data.reply) {
+    editorArea.innerHTML = data.reply.text;
+  }
 
-      const replyText = editorArea.innerHTML.trim();
-      if (!replyText) return;
+  sendBtn.addEventListener("click", async () => {
 
-      await updateDoc(doc(db, "messages", docId), {
-        reply: {
-          text: replyText
-        }
-      });
+    const replyText = editorArea.innerHTML.trim();
+    if (!replyText) return;
 
-      editorArea.innerHTML = "";
+    await updateDoc(doc(db, "messages", docId), {
+      reply: {
+        text: replyText
+      }
     });
 
-  }
+  });
+
+}
 
 });
