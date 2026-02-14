@@ -193,6 +193,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+const emojiBtn = wrapper.querySelector(".emoji-btn");
+
+const picker = new EmojiButton({
+  position: "bottom-start"
+});
+
+emojiBtn.addEventListener("click", () => {
+  picker.togglePicker(emojiBtn);
+});
+
+picker.on("emoji", emoji => {
+  const range = quill.getSelection(true);
+  quill.insertText(range.index, emoji);
+  quill.setSelection(range.index + emoji.length);
+  quill.focus();
+});
+
 quill.focus();
 
   // preload reply lama

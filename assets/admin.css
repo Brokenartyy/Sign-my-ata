@@ -201,3 +201,20 @@ body {
     padding: 16px;
   }
 }
+
+.emoji-toolbar {
+  padding: 6px 10px;
+}
+
+.emoji-btn {
+  font-family: 'VT323', monospace;
+  background: #ffe6f0;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.emoji-btn:hover {
+  background: #ffd1dc;
+}
