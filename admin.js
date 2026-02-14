@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const emojiBtn = wrapper.querySelector(".emoji-btn");
 
-const picker = new EmojiButton({
+const picker = new window.EmojiButton({
   position: "bottom-start"
 });
 
