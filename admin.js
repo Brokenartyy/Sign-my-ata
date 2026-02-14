@@ -20,6 +20,13 @@ const emailInput = document.getElementById("emailInput");
 const sendLinkBtn = document.getElementById("sendLinkBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
+import {
+  onAuthStateChanged,
+  signOut,
+  sendSignInLinkToEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
 /* ================= LOGIN ================= */
 
 sendLinkBtn.onclick = async () => {
