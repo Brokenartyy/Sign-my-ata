@@ -157,19 +157,6 @@ body {
   background: #f3f3f3;
 }
 
-.toolbar button {
-  font-family: 'VT323', monospace;
-  background: #c8fbd8;
-  border: none;
-  border-radius: 10px;
-  padding: 6px 10px;
-  cursor: pointer;
-}
-
-.toolbar button:hover {
-  background: #b3f0c7;
-}
-
 .editor-area {
   padding: 12px;
   min-height: 70px;
