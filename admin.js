@@ -3,6 +3,15 @@
 // ==========================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 import {
   getAuth,
   sendSignInLinkToEmail,
@@ -24,6 +33,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+const commentsRef = collection(db, "messages");
+
 
 // ==========================
 // LOGIN MAGIC LINK
@@ -95,15 +107,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const messagesDiv = document.getElementById("messages");
   const template = document.getElementById("editorTemplate");
 
-  createMessageCard("Pesan user muncul di sini 👀");
+  const q = query(
+    commentsRef,
+    orderBy("createdAt", "desc")
+  );
 
-  function createMessageCard(userText) {
+  onSnapshot(q, (snapshot) => {
+    messagesDiv.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      createMessageCard(docSnap.id, data);
+    });
+  });
+
+  function createMessageCard(docId, data) {
     const wrapper = document.createElement("div");
     wrapper.className = "message";
 
     const userMsg = document.createElement("div");
     userMsg.className = "user-text";
-    userMsg.textContent = userText;
+
+    userMsg.innerHTML = `
+      <strong>${data.name || "Anon"}</strong>
+      ${data.github ? `<a href="${data.github}" target="_blank">GitHub</a>` : ""}
+      ${data.content}
+      <small>${data.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
+    `;
 
     wrapper.appendChild(userMsg);
 
@@ -112,31 +142,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     messagesDiv.appendChild(wrapper);
 
-    setupEditor(wrapper);
+    setupEditor(wrapper, docId);
   }
 
-  function setupEditor(wrapper) {
+  function setupEditor(wrapper, docId) {
     const editorArea = wrapper.querySelector(".editor-area");
-    const buttons = wrapper.querySelectorAll("[data-cmd]");
-    const emojiBtn = wrapper.querySelector(".emoji-btn");
+    const sendBtn = wrapper.querySelector(".send-reply");
 
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const cmd = btn.getAttribute("data-cmd");
-        document.execCommand(cmd);
-        editorArea.focus();
+    sendBtn.addEventListener("click", async () => {
+      const replyText = editorArea.innerHTML.trim();
+      if (!replyText) return;
+
+      const { updateDoc, doc } = await import(
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+      );
+
+      await updateDoc(doc(db, "messages", docId), {
+        reply: {
+          text: replyText
+        }
       });
+
+      editorArea.innerHTML = "";
     });
-
-    if (window.PicmoPopupPicker) {
-      const picker = new window.PicmoPopupPicker.PopupPicker({
-        referenceElement: emojiBtn
-      });
-
-      picker.addEventListener("emoji:select", event => {
-        document.execCommand("insertText", false, event.emoji);
-      });
-    }
   }
 
 });
