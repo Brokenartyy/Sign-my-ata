@@ -1,5 +1,5 @@
 // ==========================
-// FIREBASE IMPORT
+// FIREBASE IMPORT (VERSI SAMA SEMUA)
 // ==========================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -23,6 +23,8 @@ import {
   doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+
+// ==========================
 // FIREBASE CONFIG
 // ==========================
 
@@ -39,90 +41,97 @@ const commentsRef = collection(db, "messages");
 
 
 // ==========================
-// LOGIN MAGIC LINK
-// ==========================
-
-const emailInput = document.getElementById("emailInput");
-const sendLinkBtn = document.getElementById("sendLinkBtn");
-const loginBox = document.getElementById("loginBox");
-const adminBox = document.getElementById("adminBox");
-const logoutBtn = document.getElementById("logoutBtn");
-
-sendLinkBtn.addEventListener("click", async () => {
-  const email = emailInput.value;
-
-  const actionCodeSettings = {
-    url: window.location.href,
-    handleCodeInApp: true
-  };
-
-  await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-  localStorage.setItem("emailForSignIn", email);
-  alert("Magic link terkirim 📩");
-});
-
-// ==========================
-// HANDLE LOGIN LINK
-// ==========================
-
-if (isSignInWithEmailLink(auth, window.location.href)) {
-  let email = localStorage.getItem("emailForSignIn");
-  if (!email) {
-    email = prompt("Masukkan email untuk konfirmasi");
-  }
-
-  signInWithEmailLink(auth, email, window.location.href)
-    .then(() => {
-      localStorage.removeItem("emailForSignIn");
-    });
-}
-
-// ==========================
-// AUTH STATE
-// ==========================
-
-onAuthStateChanged(auth, user => {
-  if (user) {
-    loginBox.hidden = true;
-    adminBox.hidden = false;
-  } else {
-    loginBox.hidden = false;
-    adminBox.hidden = true;
-  }
-});
-
-// ==========================
-// LOGOUT
-// ==========================
-
-logoutBtn.addEventListener("click", () => {
-  signOut(auth);
-});
-
-// ==========================
-// EDITOR + PICMO
+// SEMUA DOM JALAN SETELAH SIAP
 // ==========================
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  const emailInput = document.getElementById("emailInput");
+  const sendLinkBtn = document.getElementById("sendLinkBtn");
+  const loginBox = document.getElementById("loginBox");
+  const adminBox = document.getElementById("adminBox");
+  const logoutBtn = document.getElementById("logoutBtn");
   const messagesDiv = document.getElementById("messages");
   const template = document.getElementById("editorTemplate");
 
-  const q = query(
-    commentsRef,
-    orderBy("createdAt", "desc")
-  );
+  let unsubscribe = null;
 
-  onSnapshot(q, (snapshot) => {
-    messagesDiv.innerHTML = "";
+  // ================= LOGIN MAGIC LINK =================
 
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      createMessageCard(docSnap.id, data);
-    });
+  sendLinkBtn.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    if (!email) return alert("Isi email dulu 😭");
+
+    const actionCodeSettings = {
+      url: window.location.href,
+      handleCodeInApp: true
+    };
+
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+    localStorage.setItem("emailForSignIn", email);
+    alert("Magic link terkirim 📩");
   });
 
+  // ================= HANDLE LOGIN LINK =================
+
+  if (isSignInWithEmailLink(auth, window.location.href)) {
+    let email = localStorage.getItem("emailForSignIn");
+    if (!email) email = prompt("Masukkan email untuk konfirmasi");
+
+    signInWithEmailLink(auth, email, window.location.href)
+      .then(() => localStorage.removeItem("emailForSignIn"));
+  }
+
+  // ================= AUTH STATE =================
+
+  onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+      loginBox.hidden = true;
+      adminBox.hidden = false;
+
+      startFirestoreListener(); // 🔥 baru dengarkan DB setelah login
+    } else {
+      loginBox.hidden = false;
+      adminBox.hidden = true;
+
+      if (unsubscribe) unsubscribe(); // stop listener kalau logout
+    }
+  });
+
+  // ================= LOGOUT =================
+
+  logoutBtn.addEventListener("click", () => {
+    signOut(auth);
+  });
+
+
+  // ================= FIRESTORE LISTENER =================
+
+  function startFirestoreListener() {
+
+    const q = query(
+      commentsRef,
+      orderBy("createdAt", "desc")
+    );
+
+    unsubscribe = onSnapshot(q, (snapshot) => {
+
+      messagesDiv.innerHTML = "";
+
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        createMessageCard(docSnap.id, data);
+      });
+
+    });
+  }
+
+
+  // ================= BUAT CARD =================
+
   function createMessageCard(docId, data) {
+
     const wrapper = document.createElement("div");
     wrapper.className = "message";
 
@@ -133,6 +142,14 @@ document.addEventListener("DOMContentLoaded", () => {
       <strong>${data.name || "Anon"}</strong>
       ${data.github ? `<a href="${data.github}" target="_blank">GitHub</a>` : ""}
       ${data.content}
+      ${
+        data.reply
+          ? `<div class="reply">
+               <strong>Nanaa</strong>
+               ${data.reply.text}
+             </div>`
+          : ""
+      }
       <small>${data.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
     `;
 
@@ -146,17 +163,18 @@ document.addEventListener("DOMContentLoaded", () => {
     setupEditor(wrapper, docId);
   }
 
+
+  // ================= REPLY SYSTEM =================
+
   function setupEditor(wrapper, docId) {
+
     const editorArea = wrapper.querySelector(".editor-area");
     const sendBtn = wrapper.querySelector(".send-reply");
 
     sendBtn.addEventListener("click", async () => {
+
       const replyText = editorArea.innerHTML.trim();
       if (!replyText) return;
-
-      const { updateDoc, doc } = await import(
-        "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
-      );
 
       await updateDoc(doc(db, "messages", docId), {
         reply: {
@@ -166,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       editorArea.innerHTML = "";
     });
+
   }
 
 });
