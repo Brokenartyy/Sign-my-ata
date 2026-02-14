@@ -181,33 +181,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const editorContainer = wrapper.querySelector(".editor-area");
   const sendBtn = wrapper.querySelector(".send-reply");
 
-  const quill = new Quill(editorContainer, {
-    theme: "snow",
-    placeholder: "Tulis balasan...",
-    modules: {
-      toolbar: [
-        ["bold", "italic", "underline"],
-        [{ list: "bullet" }],
-        ["clean"]
-      ]
-    }
-  });
+ const quill = new Quill(editorContainer, {
+  theme: "snow",
+  placeholder: "Tulis balasan...",
+  modules: {
+    toolbar: [
+      ["bold", "italic", "underline"],
+      [{ list: "bullet" }],
+      ["clean"]
+    ]
+  }
+});
+
+quill.focus();
 
   // preload reply lama
-  if (data.reply) {
-    quill.root.innerHTML = data.reply.text;
-  }
+  if (data.reply && quill.getLength() <= 1) {
+  quill.clipboard.dangerouslyPasteHTML(data.reply.text);
+}
 
   sendBtn.addEventListener("click", async () => {
     const replyHTML = quill.root.innerHTML.trim();
     if (!replyHTML || replyHTML === "<p><br></p>") return;
 
     await updateDoc(doc(db, "messages", docId), {
-      reply: {
-        text: replyHTML
-      }
-    });
-
+  reply: {
+    text: replyHTML,
+    updatedAt: new Date()
+  }
+});
+    
   });
 }
 

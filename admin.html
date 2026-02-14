@@ -6,9 +6,6 @@
 
   <link rel="stylesheet" href="assets/admin.css">
 
-  <!-- PICMO -->
-  <script src="https://cdn.jsdelivr.net/npm/@picmo/popup-picker@5/dist/index.umd.js"></script>
-
   <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 
@@ -31,14 +28,7 @@
 
 <template id="editorTemplate">
   <div class="editor">
-    <div class="toolbar">
-      <button data-cmd="bold"><b>B</b></button>
-      <button data-cmd="italic"><i>I</i></button>
-      <button data-cmd="underline"><u>U</u></button>
-      <button class="emoji-btn">😀</button>
-    </div>
-
-    <div class="editor-area" contenteditable="true"></div>
+    <div class="editor-area"></div>
     <button class="send-reply">Kirim Balasan</button>
   </div>
 </template>
