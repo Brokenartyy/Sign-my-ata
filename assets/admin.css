@@ -3,11 +3,13 @@
 /* ===== RESET ===== */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 /* ===== BODY ===== */
 body {
-  font-family: 'VT323', monospace !important;
+  font-family: 'VT323', monospace;
   font-size: 20px;
   background: #fff5fa;
   padding: 24px;
@@ -21,7 +23,7 @@ body {
 #title {
   text-align: center;
   color: #c86491;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 /* ===== LOGIN ===== */
@@ -63,8 +65,9 @@ body {
 
 /* ===== ADMIN PANEL ===== */
 #adminBox {
-  display: grid;
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 /* ===== MESSAGE CARD ===== */
@@ -72,37 +75,70 @@ body {
   background: #ffffff;
   border-left: 6px solid #ffd1dc;
   border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  margin-bottom: 16px; /* tambahkan ini */
+  padding: 16px 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-.user-text {
-  margin-bottom: 8px; /* kecilkan jarak */
+/* ===== COMMENT STRUCTURE ===== */
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.comment-name {
+  color: #c86491;
+}
+
+.github {
+  font-size: 14px;
+  color: #666;
+  text-decoration: none;
 }
 
 .comment-body {
-  margin: 4px 0 8px 0; /* lebih rapat */
+  margin: 6px 0 8px 0;
+  line-height: 1.5;
 }
 
-.reply {
-  margin-top: 8px; /* tadinya kemungkinan 10-16px */
-  padding: 8px 12px; /* kecilkan padding */
-  background: #e8f9f0;
-  border-left: 4px solid #9dd8b7;
-  border-radius: 8px;
+.comment-body p {
+  margin: 4px 0;
 }
 
-.reply-body {
-  margin-top: 4px;
+.comment-body ul {
+  padding-left: 18px;
+  margin: 4px 0;
+}
+
+.comment-body li {
+  margin-bottom: 3px;
 }
 
 .comment-time {
-  margin-top: 6px; /* kecilkan */
   font-size: 12px;
   color: #777;
+  margin-top: 6px;
 }
 
+/* ===== REPLY ===== */
+.reply {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #e8f9f0;
+  border-left: 4px solid #9dd8b7;
+  border-radius: 10px;
+}
+
+.reply-header {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.reply-body p {
+  margin: 4px 0;
+}
 
 /* ===== EDITOR ===== */
 .editor {
@@ -110,18 +146,14 @@ body {
   background: #fff;
   border: 2px solid #c8fbd8;
   border-radius: 14px;
-  overflow: hidden;
   margin-top: 10px;
-  position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
 
-/* ===== TOOLBAR ===== */
 .toolbar {
   display: flex;
   gap: 8px;
-  align-items: center;
-  padding: 6px;
+  padding: 6px 8px;
   background: #f3f3f3;
 }
 
@@ -138,29 +170,27 @@ body {
   background: #b3f0c7;
 }
 
-/* ===== EDITOR AREA ===== */
 .editor-area {
   padding: 12px;
-  min-height: 80px;
-  max-height: 220px;
+  min-height: 70px;
+  max-height: 180px;
   overflow-y: auto;
   outline: none;
   font-size: 16px;
-
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
+  line-height: 1.5;
 }
 
-/* ===== SEND REPLY BUTTON ===== */
+.editor-area p {
+  margin: 4px 0;
+}
+
 .send-reply {
   margin: 10px;
-  align-self: flex-end;
   font-family: 'VT323', monospace;
   background: #c8fbd8;
   border: none;
-  padding: 10px 18px;
-  border-radius: 14px;
+  padding: 8px 16px;
+  border-radius: 12px;
   cursor: pointer;
 }
 
@@ -178,88 +208,9 @@ body {
   cursor: pointer;
 }
 
-/* ===== ADMIN ONLY ===== */
-.admin-only {
-  display: none;
-}
-
-body.is-admin .admin-only {
-  display: inline-block;
-}
-
 /* ===== MOBILE ===== */
 @media (max-width: 600px) {
   body {
     padding: 16px;
   }
-}
-
-.user-text p {
-  margin: 6px 0;
-}
-
-.user-text strong {
-  font-weight: bold;
-}
-
-.user-text em {
-  font-style: italic;
-}
-
-.user-text ul {
-  padding-left: 20px;
-  margin: 6px 0;
-}
-
-.user-text li {
-  margin-bottom: 4px;
-}
-
-.reply {
-  margin-top: 10px;
-  padding: 8px 12px;
-  background: #e8f9f0;
-  border-left: 4px solid #9dd8b7;
-  border-radius: 8px;
-}
-
-.comment-header {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-
-.comment-name {
-  color: #c86491;
-}
-
-.github {
-  font-size: 14px;
-  color: #666;
-  text-decoration: none;
-}
-
-.comment-body {
-  margin-bottom: 8px;
-}
-
-.comment-time {
-  font-size: 12px;
-  color: #777;
-  margin-top: 8px;
-}
-
-.reply {
-  margin-top: 10px;
-  padding: 10px;
-  background: #e8f9f0;
-  border-left: 4px solid #9dd8b7;
-  border-radius: 8px;
-}
-
-.reply-header {
-  font-weight: bold;
-  margin-bottom: 4px;
 }
