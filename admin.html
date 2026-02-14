@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <title>Admin Panel</title>
 
-  <link rel="stylesheet" href="assets/admin.css">
+  <link rel="stylesheet" href="admin.css">
 
-  <!-- PICMO POPUP PICKER -->
- <script src="https://unpkg.com/@picmo/popup-picker@5/dist/index.umd.js"></script>
- </head>
+  <!-- PICMO -->
+  <script src="https://unpkg.com/@picmo/popup-picker@5/dist/index.umd.js"></script>
+</head>
+
 <body>
 
 <h2 id="title">🔒 Admin Login</h2>
@@ -24,11 +25,6 @@
   <button id="logoutBtn">Logout</button>
 </div>
 
-<!-- FIREBASE -->
-<script type="module" src="firebase.js"></script>
-<script type="module" src="admin.js"></script>
-
-<!-- TEMPLATE EDITOR -->
 <template id="editorTemplate">
   <div class="editor">
     <div class="toolbar">
@@ -38,15 +34,12 @@
       <button class="emoji-btn">😀</button>
     </div>
 
-    <div
-      class="editor-area"
-      contenteditable="true"
-      placeholder="Tulis balasan admin..."
-    ></div>
-
+    <div class="editor-area" contenteditable="true"></div>
     <button class="send-reply">Kirim Balasan</button>
   </div>
 </template>
+
+<script type="module" src="admin.js"></script>
 
 </body>
 </html>
