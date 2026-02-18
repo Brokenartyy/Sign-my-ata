@@ -1,11 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 
-body {
-    background-image: url('lyrics.jpeg');
-    background-size: cover; 
-    background-repeat: no-repeat; 
-    background-attachment: fixed; 
-}
 
 /* ================= RESET & BASE ================= */
 * {
@@ -19,10 +13,13 @@ body {
 body {
   font-family: 'VT323', monospace;
   font-size: 20px;
-  background: #fff5f8;
   color: #222;
   letter-spacing: 1px;
   padding: 20px;
+  background-image: url('lyrics.jpeg');
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-attachment: fixed; 
 }
 
 /* ================= TITLE ================= */
