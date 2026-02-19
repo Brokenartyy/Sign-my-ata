@@ -103,22 +103,22 @@ function getGithubLink() {
 
     const text = window.quill.getText().trim();
     if (!text) {
-      alert("Pesan kosong 😭");
+      alert("empty message");
       return;
     }
 
     if (text.length > MAX_CHAR) {
-  alert("Kepanjangan 😭 maksimal 10.000 karakter");
+  alert("max 10.000 characters");
   return;
     }
 
     sendBtn.disabled = true;
-    sendBtn.textContent = "Mengirim...";
+    sendBtn.textContent = "sending...";
 
     try {
     await addDoc(commentsRef, {
     name: getAnonName(),
-    github: getGithubLink(), // 👈 BARU
+    github: getGithubLink(), 
     content: window.quill.root.innerHTML,
     createdAt: serverTimestamp()
   });
@@ -128,12 +128,12 @@ function getGithubLink() {
       githubInput.value = "";
       
     } catch (err) {
-      alert("Gagal kirim pesan 😭");
+      alert("failed to send message");
       console.error(err);
     }
 
     sendBtn.disabled = false;
-    sendBtn.textContent = "Kirim";
+    sendBtn.textContent = "send";
   };
 
   // ================= REALTIME LISTENER =================
@@ -167,7 +167,7 @@ function getGithubLink() {
       : ""
   }
 
-  <small>${d.createdAt?.toDate()?.toLocaleString() || "baru saja"}</small>
+  <small>${d.createdAt?.toDate()?.toLocaleString() || "now"}</small>
 `;
 
 
