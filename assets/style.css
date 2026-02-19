@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 
 :root {
-    --guts-purple: #a164f5;
-    --sour-purple: #c38fff;
+    --guts-purple: #3D376B;
+    --sour-purple:#8681BD;
     --electric-blue: #66d0ff;
     --deep-black: #0a0a0a;
     --slate-gray: #1a1a1a;
@@ -62,20 +62,20 @@ body::after {
 
 @media (max-width: 600px) {
     body {
-        background-image: url('assets/lyrics.jpeg'); /* mobile bg */
+        background-image: url('lyrics.jpeg'); /* mobile bg */
         background-attachment: scroll;
     }
 }
 
 html {
-    border: 3px dashed var(--guts-purple);
+    border: 3px dashed var(--white);
     border-radius: 12px;
 }
 
 h1 {
     font-size: 2.5rem;
     text-align: center;
-    color: var(--guts-purple);
+    color: var(--white);
     text-shadow: 2px 2px var(--electric-blue), 4px 4px rgba(0,0,0,0.3);
     letter-spacing: 2px;
     margin-bottom: 12px;
@@ -95,7 +95,7 @@ h5 {
     letter-spacing: 2px;
     text-align: center;
     margin: 8px 0 18px;
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .form-wrapper, #raiden-wrapper, #counter, #sendBtn, #comments {
@@ -115,12 +115,12 @@ h5 {
     width: 100%;
     border-radius: 16px;
     border: 2px solid var(--guts-purple);
-    box-shadow: 0 0 20px var(--guts-purple), 0 0 40px rgba(161,100,245,0.2);
+    box-shadow: 0 0 20px var(--electric-blue), 0 0 40px rgba(161,100,245,0.2);
 }
 
 .form-wrapper {
     background: rgba(30,30,50,0.9);
-    border: 2px solid var(--guts-purple);
+    border: 2px solid var(--electric-blue);
     border-radius: 16px;
     padding: 20px;
     box-shadow: 
