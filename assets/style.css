@@ -26,7 +26,7 @@ body {
     color: var(--white);
     letter-spacing: 1px;
     padding: 20px;
-    background-image: url('assets/Olivia Rodrigo Guts widget.jpg'); /* default desktop bg */
+    background-image: url('Olivia Rodrigo Guts widget.jpg'); /* default desktop bg */
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
