@@ -1,93 +1,377 @@
-.root {
-  --primary-color: #FF6347;
-  --secondary-color: #FFD700;
-  --background-color: #1e1e1e;
-  --text-color: #FFFFFF;
-  --link-color: #00BFFF;
-  --error-color: #FF4500;
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+:root {
+    --guts-black: #0a0a0a;
+    --guts-dark-gray: #1a1a1a;
+    --guts-red: #c71130;
+    --guts-gold: #d4af37;
+    --tech-green: #1a3a1a;
+    --scan-line: #00ff41;
+    --metal-silver: #8b8b8b;
+    --pixel-accent: #ff6b9d;
+    --highlight: #ffd700;
 }
-
+* {
+    box-sizing: border-box;
+    font-family: 'VT323', monospace;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+}
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  margin: 0;
-  padding: 0;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: #e0e0e0;
+    letter-spacing: 1px;
+    padding: 20px;
+    background-image: url('lyrics.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
 }
-
-h1, h2, h3, h4, h5, h6 {
-  color: var(--primary-color);
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 10, 0.75);
+    pointer-events: none;
+    z-index: 0;
 }
-
-p {
-  line-height: 1.6;
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient( 0deg, rgba(0, 255, 65, 0.03) 0px, rgba(0, 255, 65, 0.03) 1px, transparent 1px, transparent 2px );
+    pointer-events: none;
+    z-index: 1;
 }
-
-a {
-  color: var(--link-color);
-  text-decoration: none;
+html {
+    border: 2px solid rgba(199, 17, 48, 0.2);
 }
-
-a:hover {
-  text-decoration: underline;
+h1 {
+    font-family: 'VT323', monospace;
+    font-size: 2.5rem;
+    text-align: center;
+    color: #c71130;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8), 4px 4px 0 rgba(0, 0, 0, 0.6), 2px 2px 4px rgba(199, 17, 48, 0.5);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-weight: 900;
+    animation: glitch 3s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
 }
-
-.navbar {
-  background-color: var(--primary-color);
-  padding: 1rem;
+@keyframes glitch {
+    0%, 100% {
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8), 4px 4px 0 rgba(0, 0, 0, 0.6), 2px 2px 4px rgba(199, 17, 48, 0.5);
+    }
+    50% {
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8), 4px 4px 0 #c71130, 2px 2px 8px rgba(199, 17, 48, 0.8);
+    }
 }
-
-.navbar a {
-  margin: 0 15px;
-  color: var(--text-color);
+h5 {
+    font-family: 'VT323', monospace;
+    color: #00ff41;
+    font-size: 12px;
+    letter-spacing: 2px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 10px 0 18px;
+    position: relative;
+    z-index: 2;
 }
-
-.header {
-  background: url('../images/header-bg.jpg') no-repeat center center/cover;
-  padding: 20px;
+.form-wrapper, #raiden-wrapper, #counter, #sendBtn, #comments {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 2;
 }
-
-.button {
-  background-color: var(--secondary-color);
-  border: none;
-  color: var(--text-color);
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+#raiden-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
 }
-
-.button:hover {
-  background-color: var(--error-color);
+#raiden-wrapper img {
+    width: 100%;
+    border-radius: 0;
+    display: block;
+    border: 2px solid #c71130;
+    box-shadow: 0 0 20px rgba(199, 17, 48, 0.5), 0 0 40px rgba(199, 17, 48, 0.2);
 }
-
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-  }
-
-  .header {
-    padding: 10px;
-  }
+.form-box {
+    margin-top: 10px;
 }
-
-.animation {
-  animation: fadeIn 1s ease-in-out;
+.form-wrapper {
+    background: rgba(26, 26, 26, 0.95);
+    border: 2px solid #c71130;
+    border-radius: 0;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(199, 17, 48, 0.4), inset 0 0 15px rgba(0, 255, 65, 0.05);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
 }
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
+.form-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient( 90deg, #c71130 0px, #c71130 2px, transparent 2px, transparent 4px );
+    opacity: 0.4;
+}
+.identity-box {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.identity-box input {
+    font-size: 16px;
+    padding: 12px 14px;
+    flex: 1;
+    height: 44px;
+    border-radius: 0;
+    border: 1px solid #c71130;
+    background: rgba(10, 10, 10, 0.85);
+    color: #e0e0e0;
+    outline: none;
+    font-family: 'VT323', monospace;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 5px rgba(0, 255, 65, 0.1), 0 0 10px rgba(199, 17, 48, 0.2);
+}
+#nameInput {
+    font-family: 'VT323', monospace;
+    line-height: 1.6;
+    font-weight: 600;
+}
+#githubInput {
+    font-family: 'VT323', monospace;
+    line-height: 1.6;
+    font-size: 13px;
+}
+#nameInput::placeholder, #githubInput::placeholder {
+    color: rgba(224, 224, 224, 0.35);
+}
+#nameInput:focus, #githubInput:focus {
+    background: rgba(10, 10, 10, 0.95);
+    color: #ffd700;
+    box-shadow: inset 0 0 8px rgba(0, 255, 65, 0.2), 0 0 15px rgba(199, 17, 48, 0.5), 0 0 25px rgba(255, 215, 0, 0.25);
+    border-color: #ffd700;
+}
+#toolbar {
+    border: 2px solid #c71130;
+    border-bottom: none;
+    border-radius: 0;
+    background: rgba(10, 10, 10, 0.85);
+}
+#editor {
+    width: 100%;
+    min-height: 160px;
+    border: 2px solid #c71130;
+    border-radius: 0;
+    background: rgba(10, 10, 10, 0.85);
+    color: #e0e0e0;
+    padding: 12px;
+    box-shadow: inset 0 0 15px rgba(0, 255, 65, 0.05);
+    font-family: 'VT323', monospace;
+    border-top: none;
+}
+.ql-editor {
+    font-family: 'VT323', monospace !important;
+    color: #e0e0e0;
+    font-size: 16px;
+    line-height: 1.6;
+    background: transparent;
+}
+.ql-editor.ql-blank::before {
+    color: rgba(224, 224, 224, 0.3);
+}
+.ql-toolbar.ql-snow {
+    background: transparent;
+    border: none;
+}
+.ql-toolbar.ql-snow .ql-stroke {
+    stroke: #c71130;
+}
+.ql-toolbar.ql-snow .ql-fill {
+    fill: #c71130;
+}
+.ql-toolbar.ql-snow .ql-picker-label {
+    color: #e0e0e0;
+}
+.ql-toolbar.ql-snow button:hover, .ql-toolbar.ql-snow button.ql-active, .ql-toolbar.ql-snow button:focus {
+    color: #ffd700;
+    stroke: #ffd700;
+    fill: #ffd700;
+}
+#counter {
+    text-align: right;
+    color: #00ff41;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    opacity: 0.75;
+    font-family: 'VT323', monospace;
+}
+button {
+    font-size: 22px;
+    letter-spacing: 1px;
+    font-family: 'VT323', monospace;
+}
+#sendBtn {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    background: #c71130;
+    color: #ffd700;
+    border: 2px solid #ffd700;
+    border-radius: 0;
+    padding: 12px 20px;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    position: relative;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 0 #8b8b8b;
+    letter-spacing: 1.5px;
+}
+#sendBtn:hover {
+    background: #ffd700;
+    color: #c71130;
+    box-shadow: 0 2px 0 #8b8b8b;
+    transform: translateY(2px);
+}
+#sendBtn:active {
+    box-shadow: inset 0 2px 0 #8b8b8b;
+    transform: translateY(4px);
+}
+#comments {
+    margin-top: 24px;
+}
+.comment {
+    background: rgba(26, 26, 26, 0.9);
+    border-left: 4px solid #c71130;
+    border-right: 1px solid rgba(199, 17, 48, 0.3);
+    border-top: 1px solid rgba(199, 17, 48, 0.2);
+    border-bottom: 1px solid rgba(199, 17, 48, 0.2);
+    padding: 14px 16px;
+    margin-top: 14px;
+    border-radius: 0;
+    color: #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0, 255, 65, 0.04);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(3px);
+}
+.comment::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient( 90deg, transparent 0%, #00ff41 50%, transparent 100% );
+    opacity: 0.15;
+}
+.comment .anon {
+    color: #00ff41;
+    font-size: 11px;
+    opacity: 0.85;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+.comment-name {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 16px;
+}
+.github {
+    font-size: 12px;
+    color: #00ff41;
+    text-decoration: none;
+    opacity: 0.6;
+}
+.github:hover {
     opacity: 1;
-  }
 }
-
-/* Additional styles... */
-
-/* Complete theme CSS containing all 511 lines of the GUTS × Pixel × Metal Gear style */
-
-/* Color Variables */
-/* Animations */
-/* Responsive Design */
-/* All Styling Rules */
+.comment-body {
+    color: #e0e0e0;
+    line-height: 1.5;
+    margin-top: 6px;
+    font-size: 16px;
+}
+.comment-body p {
+    margin: 4px 0;
+}
+.comment-body ul {
+    padding-left: 18px;
+    margin: 4px 0;
+}
+.comment-body li {
+    margin-bottom: 3px;
+}
+.comment-time {
+    color: rgba(0, 255, 65, 0.5);
+    font-size: 11px;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+}
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    h5 {
+        font-size: 11px;
+    }
+    .form-wrapper, #raiden-wrapper, #counter, #sendBtn, #comments {
+        max-width: 100%;
+    }
+    .identity-box {
+        flex-direction: column;
+    }
+    #editor {
+        min-height: 120px;
+    }
+    .identity-box input {
+        font-size: 14px;
+    }
+    #sendBtn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    .comment {
+        padding: 12px 14px;
+    }
+    .comment-body {
+        font-size: 14px;
+    }
+}
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-5px) rotate(2deg);
+    }
+}
