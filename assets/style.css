@@ -1,14 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 
 :root {
-    --guts-black: #0a0a0a;
-    --guts-dark-gray: #1a1a1a;
-    --main-purple: #a164f5;
-    --neon-pink: #ff85c1;
-    --neon-cyan: #66d0ff;
-    --highlight: #ffd700;
-    --tech-green: #00ffa8;
-    --metal-silver: #c0c0c0;
+    --guts-purple: #a164f5;
+    --sour-purple: #c38fff;
+    --electric-blue: #66d0ff;
+    --deep-black: #0a0a0a;
+    --slate-gray: #1a1a1a;
+    --electric-orange: #ffb347;
+    --highlight-yellow: #ffd700;
+    --white: #ffffff;
+    --blood-red: #c71130;
 }
 
 * {
@@ -22,10 +23,10 @@
 
 body {
     font-size: 20px;
-    color: #f0f0f0;
+    color: var(--white);
     letter-spacing: 1px;
     padding: 20px;
-    background-image: url('lyrics.jpeg');
+    background-image: url('lyrics.jpeg'); /* subtle MGRR background */
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -37,7 +38,7 @@ body::before {
     content: '';
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(10, 10, 20, 0.6);
+    background: rgba(10, 10, 20, 0.6); /* dim overlay */
     pointer-events: none;
     z-index: 0;
     border-radius: 16px;
@@ -49,25 +50,26 @@ body::after {
     top: 0; left: 0; right: 0; bottom: 0;
     background-image: repeating-linear-gradient(
         0deg,
-        var(--neon-cyan) 0px,
-        var(--neon-cyan) 1px,
+        var(--electric-blue) 0px,
+        var(--electric-blue) 1px,
         transparent 1px,
         transparent 3px
     );
+    opacity: 0.05; /* dikurangi intensitas */
     pointer-events: none;
     z-index: 1;
 }
 
 html {
-    border: 3px dashed var(--neon-pink);
+    border: 3px dashed var(--guts-purple);
     border-radius: 12px;
 }
 
 h1 {
     font-size: 2.5rem;
     text-align: center;
-    color: var(--main-purple);
-    text-shadow: 2px 2px var(--neon-cyan), 4px 4px rgba(0,0,0,0.3);
+    color: var(--guts-purple);
+    text-shadow: 2px 2px var(--electric-blue), 4px 4px rgba(0,0,0,0.3);
     letter-spacing: 2px;
     margin-bottom: 12px;
     animation: glitch 2.5s infinite;
@@ -76,13 +78,13 @@ h1 {
 }
 
 @keyframes glitch {
-    0%, 100% { text-shadow: 2px 2px var(--neon-cyan), 4px 4px rgba(0,0,0,0.3); }
-    50% { text-shadow: 2px 2px var(--neon-pink), 4px 4px var(--main-purple); }
+    0%, 100% { text-shadow: 2px 2px var(--electric-blue), 4px 4px rgba(0,0,0,0.3); }
+    50% { text-shadow: 2px 2px var(--sour-purple), 4px 4px var(--guts-purple); }
 }
 
 h5 {
     font-size: 14px;
-    color: var(--tech-green);
+    color: var(--electric-blue);
     letter-spacing: 2px;
     text-align: center;
     margin: 8px 0 18px;
@@ -99,45 +101,51 @@ h5 {
 #raiden-wrapper img {
     width: 100%;
     border-radius: 16px;
-    border: 2px solid var(--neon-pink);
-    box-shadow: 0 0 20px var(--neon-pink), 0 0 40px rgba(255,133,193,0.2);
+    border: 2px solid var(--guts-purple);
+    box-shadow: 0 0 20px var(--guts-purple), 0 0 40px rgba(161,100,245,0.2);
 }
 
 .form-wrapper {
     background: rgba(30,30,50,0.9);
-    border: 2px solid var(--neon-pink);
+    border: 2px solid var(--guts-purple);
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 0 20px rgba(255,133,193,0.4), inset 0 0 15px rgba(0,255,168,0.05);
+    box-shadow: 0 0 20px rgba(193,143,255,0.4), inset 0 0 15px rgba(102,208,255,0.05);
     backdrop-filter: blur(6px);
+}
+
+.identity-box {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .identity-box input {
     font-size: 16px;
     padding: 12px 14px;
     border-radius: 12px;
-    border: 1px solid var(--neon-pink);
+    border: 1px solid var(--sour-purple);
     background: rgba(20,20,40,0.9);
-    color: #f0f0f0;
+    color: var(--white);
     outline: none;
     transition: all 0.3s ease;
-    box-shadow: inset 0 0 8px rgba(0,255,168,0.1);
+    box-shadow: inset 0 0 8px rgba(102,208,255,0.1);
 }
 
 .identity-box input:focus {
     background: rgba(20,20,40,1);
-    color: var(--highlight);
-    box-shadow: 0 0 10px var(--tech-green), 0 0 15px var(--neon-pink);
-    border-color: var(--highlight);
+    color: var(--highlight-yellow);
+    box-shadow: 0 0 10px var(--electric-blue), 0 0 15px var(--sour-purple);
+    border-color: var(--highlight-yellow);
 }
 
 #sendBtn {
     display: block;
     width: 100%;
     margin-top: 14px;
-    background: var(--main-purple);
-    color: var(--highlight);
-    border: 2px solid var(--highlight);
+    background: var(--guts-purple);
+    color: var(--highlight-yellow);
+    border: 2px solid var(--highlight-yellow);
     border-radius: 12px;
     padding: 12px 20px;
     font-weight: 900;
@@ -149,8 +157,8 @@ h5 {
 }
 
 #sendBtn:hover {
-    background: var(--highlight);
-    color: var(--main-purple);
+    background: var(--highlight-yellow);
+    color: var(--guts-purple);
     transform: translateY(-2px);
     box-shadow: 0 6px 0 var(--metal-silver);
 }
@@ -160,18 +168,28 @@ h5 {
     box-shadow: inset 0 2px 0 var(--metal-silver);
 }
 
+#counter {
+    text-align: right;
+    color: var(--electric-orange);
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    opacity: 0.75;
+    font-family: 'VT323', monospace;
+}
+
 .comment {
     background: rgba(40,40,60,0.9);
     border-left: 4px solid var(--neon-pink);
     border-radius: 12px;
     padding: 14px 16px;
     margin-top: 14px;
-    color: #f0f0f0;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.5), inset 0 0 8px rgba(0,255,168,0.06);
+    color: var(--white);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5), inset 0 0 8px rgba(102,208,255,0.06);
 }
 
 .comment .anon {
-    color: var(--tech-green);
+    color: var(--electric-blue);
     font-size: 12px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -181,12 +199,12 @@ h5 {
 }
 
 .comment-name {
-    color: var(--highlight);
+    color: var(--highlight-yellow);
     font-weight: bold;
 }
 
 .comment-time {
-    color: rgba(0,255,168,0.5);
+    color: rgba(102,208,255,0.5);
     font-size: 11px;
 }
 
