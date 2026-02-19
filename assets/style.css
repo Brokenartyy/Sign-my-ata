@@ -1,35 +1,34 @@
-.container {
-    background: url('path/to/guts-pixel-metal-gear-theme.jpg') no-repeat;
-    background-size: cover;
-    color: #ffffff;
+/* GUTS × Pixel × Metal Gear Theme CSS File */
+body {
+    background-color: #101010;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
 }
 
 .header {
-    font-family: 'Metal Gear Solid', sans-serif;
-    font-size: 24px;
-    text-align: center;
+    background: #202020;
     padding: 20px;
+    text-align: center;
 }
 
 .button {
-    background-color: #007bff;
+    background-color: #FF8800;
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 4px;
 }
 
 .footer {
-    font-size: 12px;
-    text-align: center;
+    background: #202020;
     padding: 10px;
-    position: relative;
+    text-align: center;
+    position: fixed;
     bottom: 0;
     width: 100%;
 }
