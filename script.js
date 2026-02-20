@@ -7,10 +7,11 @@ import {
   onSnapshot,
   query,
   orderBy,
-  limit
+  limit,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ================= CONFIG (JANGAN UBAH PUNYAMU) =================
+// ================= CONFIG (PAKAI PUNYAMU) =================
 const firebaseConfig = {
   apiKey: "AIzaSyCxzqdHlEFi5lIuen7vW9u2cxNbe3mPiio",
   authDomain: "pony-ata.firebaseapp.com",
@@ -21,7 +22,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const commentsRef = collection(db, "messages");
 
-// ================= DOM READY =================
 document.addEventListener("DOMContentLoaded", () => {
 
   const commentsDiv = document.getElementById("comments");
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const MAX_CHAR = 300;
 
-  // ================= QUILL INIT =================
+  // ================= QUILL =================
   const quill = new Quill("#editor", {
     theme: "snow",
     placeholder: "Tulis pesan anonim...",
@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ================= CHARACTER COUNTER =================
   quill.on("text-change", () => {
     let length = quill.getLength() - 1;
 
@@ -69,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "Anon Star",
       "Anon Cat"
     ];
-
     return fallback[Math.floor(Math.random() * fallback.length)];
   }
 
@@ -80,21 +78,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!value.startsWith("http")) {
       return `https://github.com/${value}`;
     }
-
     return value;
   }
 
-  // ================= SEND MESSAGE =================
+  // ================= SEND =================
   async function sendMessage() {
     const text = quill.getText().trim();
 
     if (!text) {
       alert("Empty message.");
-      return;
-    }
-
-    if (text.length > MAX_CHAR) {
-      alert(`Max ${MAX_CHAR} characters.`);
       return;
     }
 
@@ -106,7 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
         name: getAnonName(),
         github: getGithubLink(),
         content: quill.root.innerHTML,
-        createdAt: new Date() // stabil, bukan serverTimestamp
+        createdAt: serverTimestamp(),
+        reply: null
       });
 
       quill.setText("");
@@ -127,7 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sendBtn.disabled = false;
   }
 
-  // Pasang event listener
   sendBtn.addEventListener("click", sendMessage);
 
   // ================= REALTIME LISTENER =================
@@ -143,8 +135,15 @@ document.addEventListener("DOMContentLoaded", () => {
     snapshot.forEach((doc) => {
       const d = doc.data();
 
+      // skip kalau timestamp belum ready
+      if (!d.createdAt) return;
+
       const el = document.createElement("div");
       el.className = "comment";
+
+      const dateString = d.createdAt?.toDate
+        ? d.createdAt.toDate().toLocaleString()
+        : "just now";
 
       el.innerHTML = `
         <span class="anon">${d.name || "Anon"}</span>
@@ -153,8 +152,19 @@ document.addEventListener("DOMContentLoaded", () => {
             ? `<a class="github" href="${d.github}" target="_blank">GitHub</a>`
             : ""
         }
+
         <div class="content">${d.content}</div>
-        <small>${new Date(d.createdAt).toLocaleString()}</small>
+
+        ${
+          d.reply
+            ? `<div class="reply">
+                <strong>Nanaa</strong>
+                <div>${d.reply.text}</div>
+              </div>`
+            : ""
+        }
+
+        <small>${dateString}</small>
       `;
 
       commentsDiv.appendChild(el);
