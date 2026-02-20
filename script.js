@@ -105,7 +105,7 @@ window.sendMessage = async function () {
       name: getAnonName(),
       github: getGithubLink(),
       content: quill.root.innerHTML,
-      createdAt: serverTimestamp()
+      createdAt: new Date()
     });
 
     quill.setText("");
