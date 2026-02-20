@@ -25,152 +25,132 @@
   const commentsRef = collection(db, "messages");
 
   // ================= DOM =================
-  const commentsDiv = document.getElementById("comments");
-  const sendBtn = document.getElementById("sendBtn");
-  const counter = document.getElementById("counter");
+const commentsDiv = document.getElementById("comments");
+const sendBtn = document.getElementById("sendBtn");
+const counter = document.getElementById("counter");
+const nameInput = document.getElementById("nameInput");
+const githubInput = document.getElementById("githubInput");
 
-  // ================= QUILL (GLOBAL) =================
-  window.quill = new Quill("#editor", {
-    theme: "snow",
-    placeholder: "Tulis pesan anonim...",
-    modules: {
-      toolbar: [
-        ["bold", "italic", "underline"],
-        [{ list: "bullet" }],
-        ["clean"]
-      ]
-    }
-  });
+// ================= QUILL =================
+const MAX_CHAR = 300;
 
-  // ================= COUNTER =================
-  window.quill.on("text-change", () => {
-    const length = window.quill.getText().trim().length;
-    counter.textContent = `${length} karakter`;
-  });
+const quill = new Quill("#editor", {
+  theme: "snow",
+  placeholder: "Tulis pesan anonim...",
+  modules: {
+    toolbar: [
+      ["bold", "italic", "underline"],
+      [{ list: "bullet" }],
+      ["clean"]
+    ]
+  }
+});
 
-  const MAX_CHAR = 300;
-
-window.quill.on("text-change", () => {
-  const length = window.quill.getLength();
+// SINGLE listener only
+quill.on("text-change", () => {
+  let length = quill.getLength() - 1; // minus newline
 
   if (length > MAX_CHAR) {
-    window.quill.deleteText(MAX_CHAR, length);
+    quill.deleteText(MAX_CHAR, quill.getLength());
+    length = MAX_CHAR;
   }
 
-  counter.textContent = `${length - 1} / ${MAX_CHAR}`;
+  counter.textContent = `${length} / ${MAX_CHAR}`;
 });
-  
 
-  // ================= RANDOM ANON =================
-  const nameInput = document.getElementById("nameInput");
-
+// ================= HELPERS =================
 function getAnonName() {
   const value = nameInput.value.trim();
+  if (value) return value;
 
-  if (value.length === 0) {
-    const fallback = [
-      "Anon Pony",
-      "Anon Fox",
-      "Anon Ghost",
-      "Anon Star",
-      "Anon Cat"
-    ];
-    return fallback[Math.floor(Math.random() * fallback.length)];
-  }
-
-  return value;
+  const fallback = [
+    "Anon Pony",
+    "Anon Fox",
+    "Anon Ghost",
+    "Anon Star",
+    "Anon Cat"
+  ];
+  return fallback[Math.floor(Math.random() * fallback.length)];
 }
-
-  // ================= GITHUB LINK =================
-  const githubInput = document.getElementById("githubInput");
 
 function getGithubLink() {
   const value = githubInput.value.trim();
-
   if (!value) return null;
 
-  // auto rapihin kalau user cuma nulis username
   if (!value.startsWith("http")) {
     return `https://github.com/${value}`;
   }
-
   return value;
 }
-  
-  // ================= SEND MESSAGE =================
-  window.sendMessage = async function () {
-    window.quill.blur();
 
-    const text = window.quill.getText().trim();
-    if (!text) {
-      alert("empty message");
-      return;
-    }
+// ================= SEND MESSAGE =================
+window.sendMessage = async function () {
+  const text = quill.getText().trim();
 
-    if (text.length > MAX_CHAR) {
-  alert("max 10.000 characters");
-  return;
-    }
-
-    sendBtn.disabled = true;
-    sendBtn.textContent = "sending...";
-
-    try {
-    await addDoc(commentsRef, {
-    name: getAnonName(),
-    github: getGithubLink(), 
-    content: window.quill.root.innerHTML,
-    createdAt: serverTimestamp()
-  });
-
-
-      window.quill.setText("");
-      githubInput.value = "";
-      
-    } catch (err) {
-      alert("failed to send message");
-      console.error(err);
-    }
-
-    sendBtn.disabled = false;
-    sendBtn.textContent = "send";
-  };
-
-  // ================= REALTIME LISTENER =================
-  const q = query(
-    commentsRef,
-    orderBy("createdAt", "desc"),
-    limit(20) // biar gak berat
-  );
-
-  onSnapshot(q, (snapshot) => {
-    // hapus loading halaman (kalau ada)
-    document.getElementById("loading")?.remove();
-
-    commentsDiv.innerHTML = "";
-
-    snapshot.forEach((doc) => {
-      const d = doc.data();
-      const el = document.createElement("div");
-      el.className = "comment";
-      el.innerHTML = `
-  <span class="anon">${d.name || "Anon"}</span>
-  ${d.github ? `<a class="github" href="${d.github}" target="_blank">GitHub</a>` : ""}
-  ${d.content}
-
-  ${
-    d.reply
-      ? `<div class="reply">
-           <strong>Nanaa</strong>
-           ${d.reply.text}
-         </div>`
-      : ""
+  if (!text) {
+    alert("Empty message.");
+    return;
   }
 
-  <small>${d.createdAt?.toDate()?.toLocaleString() || "now"}</small>
-`;
+  if (text.length > MAX_CHAR) {
+    alert(`Max ${MAX_CHAR} characters.`);
+    return;
+  }
 
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Sending...";
 
-      commentsDiv.appendChild(el);
+  try {
+    await addDoc(commentsRef, {
+      name: getAnonName(),
+      github: getGithubLink(),
+      content: quill.root.innerHTML,
+      createdAt: serverTimestamp()
     });
+
+    quill.setText("");
+    nameInput.value = "";
+    githubInput.value = "";
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to send message.");
+  }
+
+  sendBtn.disabled = false;
+  sendBtn.textContent = "Send";
+};
+
+// ================= REALTIME LISTENER =================
+const q = query(
+  commentsRef,
+  orderBy("createdAt", "desc"),
+  limit(20)
+);
+
+onSnapshot(q, (snapshot) => {
+  commentsDiv.innerHTML = "";
+
+  snapshot.forEach((doc) => {
+    const d = doc.data();
+
+    // skip kalau timestamp belum ready
+    if (!d.createdAt) return;
+
+    const el = document.createElement("div");
+    el.className = "comment";
+
+    el.innerHTML = `
+      <span class="anon">${d.name || "Anon"}</span>
+      ${
+        d.github
+          ? `<a class="github" href="${d.github}" target="_blank">GitHub</a>`
+          : ""
+      }
+      <div class="content">${d.content}</div>
+      <small>${d.createdAt.toDate().toLocaleString()}</small>
+    `;
+
+    commentsDiv.appendChild(el);
   });
+});
