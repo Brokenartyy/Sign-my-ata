@@ -1,298 +1,318 @@
 @import url('https://fonts.cdnfonts.com/css/techno-hideo');
 
 :root {
-    --guts-purple: #3D376B;
-    --sour-purple:#8681BD;
-    --electric-blue: #66d0ff;
-    --deep-black: #0a0a0a;
-    --slate-gray: #1a1a1a;
-    --electric-orange: #ffb347;
-    --highlight-yellow: #ffd700;
-    --white: #ffffff;
-    --blood-red: #c71130;
+  --electric-blue: #66d0ff;
+  --guts-purple: #3D376B;
+  --blood-red: #c71130;
+  --deep-bg: rgba(8,12,20,0.95);
+  --panel-bg: rgba(12,18,30,0.95);
+  --highlight-yellow: #ffd700;
+  --white: #ffffff;
 }
 
+/* =========================
+   GLOBAL RESET
+========================= */
+
 * {
-    box-sizing: border-box;
-    font-family: "Courier New", Courier, monospace;
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Courier New", monospace;
 }
 
 body {
-    font-size: 20px;
-    color: var(--white);
-    letter-spacing: 1px;
-    padding: 20px;
-    background-image: url('Olivia Rodrigo Guts widget.jpg'); /* default desktop bg */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    overflow-x: hidden;
-    position: relative;
+  padding: 20px;
+  color: var(--white);
+  background: url("Olivia Rodrigo Guts widget.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  overflow-x: hidden;
 }
 
+/* =========================
+   BACKGROUND OVERLAY
+========================= */
+
+/* Dark GUTS overlay */
 body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(10, 10, 20, 0.6); /* dim overlay */
-    pointer-events: none;
-    z-index: 0;
-    border-radius: 16px;
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(10,10,10,0.75), rgba(0,0,0,0.85)),
+    radial-gradient(circle at 50% 20%, rgba(199,17,48,0.2), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
 }
 
+/* Scanline sweep */
 body::after {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: repeating-linear-gradient(
-        0deg,
-        var(--electric-blue) 0px,
-        var(--electric-blue) 1px,
-        transparent 1px,
-        transparent 3px
-    );
-    opacity: 0.05; /* tipis biar subtle */
-    pointer-events: none;
-    z-index: 1;
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(102,208,255,0.05) 0px,
+    rgba(102,208,255,0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: sweep 10s linear infinite;
+  pointer-events: none;
+  z-index: 1;
 }
 
-@media (max-width: 600px) {
-    body {
-        background-image: url('lyrics.jpeg'); /* mobile bg */
-        background-attachment: scroll;
-    }
+@keyframes sweep {
+  from { background-position: 0 0; }
+  to { background-position: 0 200px; }
 }
 
-html {
-    border: 3px dashed var(--white);
-    border-radius: 12px;
+/* =========================
+   MAIN FRAME
+========================= */
+
+.codec-frame {
+  position: relative;
+  z-index: 2; /* ABOVE background overlays */
+  max-width: 650px;
+  margin: auto;
+  padding: 20px;
+  background: var(--deep-bg);
+  border: 2px solid var(--electric-blue);
+  border-radius: 16px;
+  box-shadow:
+    0 0 25px rgba(102,208,255,0.4),
+    inset 0 0 25px rgba(199,17,48,0.08);
 }
+
+/* RGB glitch inside frame */
+.codec-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255,0,0,0.03), rgba(255,0,0,0.03)),
+    linear-gradient(rgba(0,255,255,0.03), rgba(0,255,255,0.03));
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  animation: glitchBurst 6s infinite;
+}
+
+@keyframes glitchBurst {
+  0% { opacity: 0; transform: translate(0); }
+  2% { opacity: 1; transform: translate(-3px,2px); }
+  3% { opacity: 0; transform: translate(2px,-1px); }
+  100% { opacity: 0; transform: translate(0); }
+}
+
+/* =========================
+   HEADINGS
+========================= */
 
 h1 {
-    font-family: 'Techno Hideo', sans-serif;
-    font-size: 2.5rem;
-    text-align: center;
-    color: var(--white);
-    text-shadow: 2px 2px var(--electric-blue), 4px 4px rgba(0,0,0,0.3);
-    letter-spacing: 2px;
-    margin-bottom: 12px;
-    animation: glitch 2.5s infinite;
-    position: relative;
-    z-index: 2;
-}
-
-h1::before {
-    content: "SCANNING... OBJECTIVE: GUTS";
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    color: var(--electric-blue);
-    letter-spacing: 5px;
-    opacity: 0.6;
-}
-
-@keyframes glitch {
-    0%, 100% { text-shadow: 2px 2px var(--electric-blue), 4px 4px rgba(0,0,0,0.3); }
-    50% { text-shadow: 2px 2px var(--sour-purple), 4px 4px var(--guts-purple); }
+  font-family: 'Techno Hideo', sans-serif;
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px var(--electric-blue);
 }
 
 h5 {
-     font-family: 'Techno Hideo', sans-serif;
-    font-size: 14px;
-    color: var(--electric-blue);
-    letter-spacing: 2px;
-    text-align: center;
-    margin: 8px 0 18px;
-    opacity: 0.9;
+  text-align: center;
+  font-size: 12px;
+  margin: 10px 0 20px;
+  letter-spacing: 2px;
+  color: var(--electric-blue);
 }
 
-.form-wrapper, #raiden-wrapper, #counter, #sendBtn, #comments, iframe {
-    max-width: 520px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
+/* =========================
+   PANEL BOX
+========================= */
+
+.codec-box {
+  position: relative;
+  background: var(--panel-bg);
+  border: 2px solid var(--electric-blue);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 0 15px rgba(102,208,255,0.3);
+  z-index: 2;
 }
 
-#raiden-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 12px;
+/* ensure content above tape */
+.codec-box > * {
+  position: relative;
+  z-index: 2;
 }
+
+/* =========================
+   LABEL
+========================= */
+
+.codec-label {
+  position: absolute;
+  top: -12px;
+  left: 15px;
+  font-family: 'Techno Hideo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--electric-blue);
+  background: var(--deep-bg);
+  padding: 2px 6px;
+  z-index: 3;
+}
+
+.codec-label.red {
+  color: var(--blood-red);
+}
+
+/* =========================
+   PURPLE BAND-AID TAPE
+========================= */
+
+.corner-tape {
+  position: absolute;
+  width: 90px;
+  height: 28px;
+  background: linear-gradient(
+    to bottom,
+    rgba(120,110,190,0.95),
+    rgba(90,80,160,0.95)
+  );
+  border-radius: 14px;
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.25),
+    inset 0 -3px 6px rgba(0,0,0,0.25),
+    0 6px 10px rgba(0,0,0,0.5);
+  opacity: 0.95;
+  z-index: 1; /* BELOW TEXT */
+}
+
+/* middle pad */
+.corner-tape::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 36px;
+  height: 16px;
+  background: rgba(180,170,255,0.35);
+  border-radius: 8px;
+  transform: translate(-50%, -50%);
+}
+
+/* texture */
+.corner-tape::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(0,0,0,0.04) 0px,
+    rgba(0,0,0,0.04) 2px,
+    transparent 2px,
+    transparent 5px
+  );
+  border-radius: 14px;
+}
+
+.tape-top-left {
+  top: -14px;
+  left: -18px;
+  transform: rotate(-28deg);
+}
+
+.tape-top-right {
+  top: -14px;
+  right: -18px;
+  transform: rotate(28deg);
+}
+
+/* =========================
+   RAIDEN
+========================= */
 
 #raiden-wrapper img {
-    width: 100%;
-    border-radius: 16px;
-    border: 2px solid var(--guts-purple);
-    box-shadow: 0 0 20px var(--electric-blue), 0 0 40px rgba(161,100,245,0.2);
+  width: 100%;
+  border-radius: 10px;
+  filter: contrast(1.2) grayscale(0.2);
 }
 
-.form-wrapper {
-    background: rgba(30,30,50,0.9);
-    border: 2px solid var(--electric-blue);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 
-        0 0 20px rgba(207, 107, 124, 0.4),
-        inset 0 0 15px rgba(0, 255, 65, 0.05),
-        0 4px 8px rgba(0, 0, 0, 0.5),
-        inset -1px -1px 0 rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(6px);
-    position: relative; /* penting untuk scrapbook tape */
-}
-
-/* Scrapbook Tape Effect */
-.form-wrapper::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 15%;
-    width: 70%;
-    height: 16px;
-    background: repeating-linear-gradient(
-        45deg,
-        #f4e4c1,
-        #f4e4c1 10px,
-        rgba(244, 228, 193, 0.7) 10px,
-        rgba(244, 228, 193, 0.7) 20px
-    );
-    opacity: 0.6;
-    transform: rotate(-2deg);
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
-}
+/* =========================
+   FORM
+========================= */
 
 .identity-box {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .identity-box input {
-    font-size: 16px;
-    font-family: "Courier New", Courier, monospace;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid var(--sour-purple);
-    background: rgba(20,20,40,0.9);
-    color: var(--white);
-    outline: none;
-    transition: all 0.3s ease;
-    box-shadow: inset 0 0 8px rgba(102,208,255,0.1);
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--guts-purple);
+  background: rgba(20,20,40,0.9);
+  color: white;
 }
 
-.identity-box input:focus {
-    background: rgba(20,20,40,1);
-    color: var(--highlight-yellow);
-    box-shadow: 0 0 10px var(--electric-blue), 0 0 15px var(--sour-purple);
-    border-color: var(--highlight-yellow);
-}
-
-#sendBtn {
-    display: block;
-    width: 100%;
-    margin-top: 14px;
-    background: var(--guts-purple);
-    color: var(--highlight-yellow);
-    border: 2px solid var(--highlight-yellow);
-    border-radius: 12px;
-    padding: 12px 20px;
-    font-weight: 900;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 0 var(--metal-silver);
-    letter-spacing: 1.5px;
-    font-family: 'Techno Hideo', sans-serif;
-}
-
-#sendBtn:hover {
-    background: var(--highlight-yellow);
-    color: var(--guts-purple);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 var(--metal-silver);
-}
-
-#sendBtn:active {
-    transform: translateY(0px);
-    box-shadow: inset 0 2px 0 var(--metal-silver);
+#editor {
+  min-height: 120px;
+  background: rgba(10,15,25,0.9);
+  border-radius: 8px;
 }
 
 #counter {
-    text-align: right;
-    color: var(--electric-orange);
-    font-size: 12px;
-    letter-spacing: 1px;
-    margin-top: 8px;
-    opacity: 0.75;
-    font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+  text-align: right;
+  margin-top: 8px;
+  opacity: 0.7;
 }
+
+#sendBtn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  font-family: 'Techno Hideo', sans-serif;
+  background: var(--guts-purple);
+  border: 2px solid var(--highlight-yellow);
+  color: var(--highlight-yellow);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#sendBtn:hover {
+  background: var(--highlight-yellow);
+  color: var(--guts-purple);
+}
+
+/* =========================
+   COMMENTS
+========================= */
 
 .comment {
-    background: rgba(40,40,60,0.9);
-    border-left: 4px solid var(--sour-purple);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-top: 14px;
-    color: var(--white);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.5), inset 0 0 8px rgba(102,208,255,0.06);
-    position: relative; /* penting untuk sticker */
+  background: rgba(20,25,40,0.9);
+  border-left: 3px solid var(--electric-blue);
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
 }
 
-/* Sticker Effect */
-.comment::after {
-    content: '☻';
-    position: absolute;
-    top: 8px;
-    right: 15px;
-    font-size: 24px;
-    opacity: 0.4;
-}
-
-.comment .anon {
-    color: var(--electric-blue);
-    font-size: 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 4px;
-    font-weight: 600;
-}
-
-.comment-name {
-    color: var(--highlight-yellow);
-    font-weight: bold;
-}
-
-.comment-time {
-    color: rgba(102,208,255,0.5);
-    font-size: 11px;
-}
-
-iframe {
-    display: block;       
-    margin: 20px auto;    
-    border-radius: 12px;  
-}
-
-iframe[src*="spotify"]:hover {
-    box-shadow: 0 0 15px var(--electric-blue);
-    transition: 0.3s ease-in-out;
-    filter: brightness(1.1);
-}
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media (max-width: 600px) {
-    h1 { font-size: 1.8rem; }
-    h5 { font-size: 12px; }
-    .identity-box { flex-direction: column; }
-    #editor { min-height: 120px; }
-    #sendBtn { font-size: 14px; padding: 10px 16px; }
-}
-@keyframes float {
-    0%,100% { transform: translateY(0px) rotate(0deg);}
-    50% { transform: translateY(-4px) rotate(2deg);}
+  .identity-box {
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
 }

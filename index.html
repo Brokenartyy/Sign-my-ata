@@ -2,51 +2,76 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Sign My ATA</title>
+  <title>Sign My ATA - Codec Mode</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet"/>
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+<div class="bg-layer"></div>
+<div class="codec-frame">
 
-<h1>˚.⋆ֹ Sign My ATA</h1>
+  <h1>˚.⋆ֹ Sign My ATA</h1>
+  <h5>⚠️ Careful, he bites</h5>
 
-<div id="raiden-wrapper">
-  <img src="assets/raiden-fortnite-raiden-fortnite-emote.gif" alt="">
-</div>
-
-  
-<h5>⚠️ Careful, he bites</h5>
-  
-  <div class="form-box">  
- <div class="form-wrapper">
-
-  <div class="identity-box">
-    <input id="nameInput" placeholder="anonymous" />
-   
- <input id="githubInput" placeholder="GitHub (opsional)" />
+  <!-- RAiDEN PORTRAIT -->
+  <div id="raiden-wrapper" class="codec-box">
+    <span class="codec-label">FREQ 141.80</span>
+    <img src="assets/raiden-fortnite-raiden-fortnite-emote.gif" alt="Raiden">
   </div>
 
-  <!-- quill toolbar -->
-  <div id="toolbar"></div>
+  <!-- FORM -->
+  <div class="form-box codec-box codec-tape">
+    <span class="codec-label">TRANSMIT MESSAGE</span>
+  <div class="corner-tape tape-top-left"></div>
+  <div class="corner-tape tape-top-right"></div>
+    <div class="form-wrapper">
+      <div class="identity-box">
+        <input id="nameInput" placeholder="anonymous" />
+        <input id="githubInput" placeholder="GitHub (opsional)" />
+      </div>
 
-  <!-- editor -->
-  <div id="editor"></div>
+      <div id="toolbar"></div>
+      <div id="editor"></div>
+    </div>
 
- </div> 
+    <div id="counter">0 karakter</div>
+    <button id="sendBtn" type="button">KIRIM</button>
+  </div>
 
-<div id="counter">0 karakter</div>
-<button id="sendBtn" type="button" onclick="sendMessage()">Kirim</button>
+  <!-- COMMENTS -->
+  <div id="comments" class="codec-box codec-tape">
+    <div class="corner-tape tape-top-left"></div>
+  <div class="corner-tape tape-top-right"></div>
+    <span class="codec-label red">INCOMING SIGNAL</span>
+  </div>
 
-<div id="comments"></div>
+  <!-- AUDIO SECTION -->
+  <h5>• AUDIO CHANNEL •</h5>
 
-<h5>• . ݁₊ ⊹ . ݁꒰ঌ·✦·໒꒱ ݁ . ⊹ ₊ ݁. • </h5>
-<h5>this page inspo aesthetics</h5>
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/5CscrLqFBgPfZR8fGtikov?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/6CLFAVCDCc4DZRhnCqhNog?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  <div class="codec-audio codec-box codec-tape">
+    <span class="codec-label">AUDIO FEED ACTIVE</span>
+  <div class="corner-tape tape-top-left"></div>
+  <div class="corner-tape tape-top-right"></div>
+    <iframe src="https://open.spotify.com/embed/track/5CscrLqFBgPfZR8fGtikov"
+      width="100%" height="152" frameBorder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"></iframe>
+  </div>
+
+  <div class="codec-audio codec-box codec-tape">
+    <span class="codec-label">AUDIO FEED ACTIVE</span>
+    <div class="corner-tape tape-top-left"></div>
+  <div class="corner-tape tape-top-right"></div>
+    <iframe src="https://open.spotify.com/embed/track/6CLFAVCDCc4DZRhnCqhNog"
+      width="100%" height="152" frameBorder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"></iframe>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
-
 <script type="module" src="script.js"></script>
 
 </body>
